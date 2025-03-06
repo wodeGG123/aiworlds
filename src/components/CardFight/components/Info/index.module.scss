@@ -1,0 +1,164 @@
+.wrap {
+  .tail {
+    width: 73px;
+    height: 41px;
+    background: url("/img/leveltail.png") left top;
+    background-size: cover;
+    position: absolute;
+    right: 0px;
+    top: -1px;
+    text-align: center;
+    padding-top: 4px;
+  }
+}
+.drawerContent {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  padding-top: 60px;
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 36px;
+    color: #ffffff;
+    font-weight: bold;
+  }
+  .content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    & > div {
+      display: flex;
+      margin-top: 10px;
+    }
+    h3 {
+      color: #fff;
+      margin-bottom: 30px;
+      background-size: cover;
+      height: 35px;
+      width: 100px;
+      text-align: center;
+    }
+    img {
+      width: 240px;
+    }
+  }
+  .pan {
+    margin-top: 30px;
+    background: url("/img/beijing3.png") left top;
+    background-size: cover;
+    padding-top: 12px;
+    .panData {
+      display: flex;
+      padding-left: 12px;
+    }
+    .panLine {
+      width: 100%;
+      margin: 20px 0;
+      img {
+        width: 100%;
+      }
+    }
+    .panAbility {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      .panAbilityItem {
+        width: 40px;
+        height: 40px;
+        border-radius: 40px;
+        background-color: #312914;
+        border: 2px solid #5e5330;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: 75%;
+          height: 75%;
+        }
+      }
+      .panAbilityCnLine {
+        width: 30px;
+        display: flex;
+        align-items: center;
+        img {
+          width: 100%;
+        }
+      }
+    }
+    .panButtonWrap {
+      display: flex;
+      justify-content: center;
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    .panButton {
+      width: 140px;
+      height: 44px;
+      background: url(/icons/button.png);
+      background-size: 100% 100%;
+      h5 {
+        color: #fff;
+        font-size: 16px;
+        text-align: center;
+        font-weight: normal;
+      }
+      p {
+        display: flex;
+        justify-content: center;
+        color: #ffffff;
+        padding-top: 1px;
+        img {
+          height: 20px;
+        }
+      }
+    }
+    .itemWrap {
+      display: flex;
+      align-items: center;
+      margin-right: 6px;
+      dt {
+        width: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          height: 16px;
+        }
+      }
+      dd {
+        margin-left: 4px;
+        color: #ffffff;
+        font-size: 12px;
+      }
+    }
+  }
+  .backWrap {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    p {
+      width: 120px;
+      height: 66px;
+      text-align: center;
+      background: url(/img/leveltail.png) 0 0;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: bold;
+    }
+  }
+}
+
+.drawerWrap {
+  :global(.MuiDrawer-paper) {
+    background-color: transparent !important;
+  }
+}

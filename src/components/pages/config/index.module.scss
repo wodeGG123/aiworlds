@@ -1,0 +1,87 @@
+.wrap {
+  color: #ffffff;
+  position: fixed;
+  font-size: 12px;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  .topWrap {
+    height: 40px;
+    border-bottom: 3px solid #ffffff;
+    padding: 12px;
+    background-color: #2e524f;
+  }
+
+  .contentWrap {
+    background: url("/img/beijing1.jpg") center center;
+    background-size: cover;
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    overflow: auto;
+    .contentItem {
+      display: flex;
+      align-items: center;
+      padding: 6px 0;
+      .swalWrap {
+        margin-left: 12px;
+      }
+    }
+  }
+  .bottomWrap {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 6px;
+    width: 100%;
+    background: url("/img/beijing1_bottom.jpg") center center;
+    background-size: cover;
+    background-repeat: repeat-y;
+    height: 160px;
+    border-top: 3px solid #0e7469;
+    .bottomBlock1 {
+      display: flex;
+      justify-content: space-around;
+      div {
+        img {
+          width: 40px;
+        }
+        p {
+          font-size: 12px;
+          text-align: center;
+        }
+      }
+    }
+    .bottomBlock2 {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .bottomBlock2 > div:first-child,
+    .bottomBlock2 > div:nth-child(3) {
+      img {
+        width: 40px;
+      }
+      p {
+        font-size: 16px;
+        text-align: center;
+      }
+    }
+    & > div:nth-child(2) {
+      img {
+        width: 60px;
+      }
+      p {
+        font-size: 24px;
+        text-align: center;
+      }
+    }
+  }
+}

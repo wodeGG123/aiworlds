@@ -1,0 +1,41 @@
+.wrap {
+}
+.drawerContent {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  .cardContent {
+    padding: 12px;
+    width: 100%;
+    height: calc(100vh - 66px);
+    overflow: auto;
+    & > div {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      & > div {
+        margin-bottom: 24px;
+      }
+    }
+  }
+  .backWrap {
+    height: 60px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding-left: 12px;
+    display: flex;
+    align-items: center;
+    border-top: 2px solid #0e7469;
+    img {
+      height: 44px;
+    }
+  }
+}
+
+.drawerWrap {
+  :global(.MuiDrawer-paper) {
+    background-color: transparent !important;
+  }
+}

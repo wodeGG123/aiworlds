@@ -1,0 +1,22 @@
+.wrap {
+  position: relative;
+  & > div {
+    width: 100%;
+    height: 100%;
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    p {
+      font-size: 18px;
+      color: #ffffff;
+      position: relative;
+      padding: 8px;
+    }
+  }
+  h5 {
+    text-align: center;
+    color: #ffffff;
+  }
+}

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
-import Index from "@/components/pages/index";
+import Config from "@/components/pages/config";
 import styles from "@/styles/Home.module.css";
 
 const geistSans = Geist({
@@ -27,7 +27,7 @@ export default function Home() {
         className={`${styles.page} ${geistSans.variable} ${geistMono.variable}`}
       >
         <main className={styles.main}>
-          <Index />
+          <Config />
         </main>
       </div>
     </>

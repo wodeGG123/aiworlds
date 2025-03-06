@@ -1,0 +1,34 @@
+.wrap {
+  height: 41px;
+  width: 235px;
+  position: relative;
+  .swal {
+    width: 192px;
+    height: 21px;
+    background: url("/img/levelswal.png") left top;
+    background-size: cover;
+    position: absolute;
+    top: 9px;
+  }
+  .swal1 {
+    width: 192px;
+    height: 21px;
+    background: url("/img/levelswal1.png") left top;
+    background-size: cover;
+    position: absolute;
+    top: 9px;
+    padding-left: 30px;
+    padding-top: 2px;
+  }
+  .tail {
+    width: 73px;
+    height: 41px;
+    background: url("/img/leveltail.png") left top;
+    background-size: cover;
+    position: absolute;
+    right: 0px;
+    top: -1px;
+    text-align: center;
+    padding-top: 4px;
+  }
+}

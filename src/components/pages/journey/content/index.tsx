@@ -1,0 +1,261 @@
+import { useState } from "react";
+import styles from "./index.module.scss";
+import Coin from "@/components/Coin";
+import Card from "@/components/Card";
+import LevelLine from "@/components/LevelLine";
+import Button from "@mui/material/Button";
+import CardStory from "@/components/CardStory";
+import { useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import axios from "axios";
+import systemContent from "./systemContent";
+import { SSE } from "@/lib/sse.js";
+import Typewriter from "../components/TypeWriter";
+import _ from "lodash";
+
+const transfer = (list) => {
+  let rs = [];
+  let _list = list.split("$");
+  let option = {
+    type: "option",
+    content: [],
+  };
+  _list.forEach((item) => {
+    if (item.includes("[旁白]")) {
+      rs.push({
+        type: "narration",
+        content: item.replace("[旁白]", ""),
+      });
+    }
+    if (item.includes("[对话]")) {
+      const dialog = item.replace("[对话]", "").split("=>");
+      rs.push({
+        type: "dialogue",
+        name: dialog[0].replace("(", "").replace(")", ""),
+        content: dialog[1],
+      });
+    }
+    if (item.includes("[选项]")) {
+      option.content.push(item.replace("[选项]", ""));
+    }
+  });
+  rs.push(option);
+  return rs;
+};
+const ItemCompontent = () => {
+  return (
+    <div className={styles.contentItem}>
+      <Card size="small" />
+      <div className={styles.swalWrap}>
+        <LevelLine />
+        <p>曹操 +3</p>
+      </div>
+    </div>
+  );
+};
+let t = "";
+let msgs = [
+  {
+    role: "system",
+    content: systemContent,
+  },
+];
+
+const Main = () => {
+  const [status, setStatus] = useState(0);
+  const [content, setContent] = useState(false);
+  const [current, setCurrent] = useState(false);
+  const [step, setStep] = useState("-1");
+  const params = {
+    model: "deepseek-ai/DeepSeek-V3",
+    messages: [{ role: "user", content: JSON.stringify(msgs) }],
+    stream: true,
+    max_tokens: 512,
+    temperature: 0.7,
+    top_p: 1,
+    top_k: 1,
+    frequency_penalty: 0,
+    response_format: { type: "text" },
+    n: 1,
+  };
+  useEffect(() => {
+    // if(current.type === 'narration'){
+    // }
+  }, [current]);
+
+  useEffect(() => {
+    console.log("step", step);
+    if (step !== "-1" && content) {
+      setCurrent(false);
+      setTimeout(() => {
+        if (Number(step) >= content.length) {
+          debugger;
+          setStep("-1");
+          setContent(false);
+          setCurrent(false);
+          return;
+        } else {
+          const _current = content[Number(step)];
+          setCurrent(_current);
+        }
+      }, 100);
+    }
+  }, [step, content]);
+  useEffect(() => {
+    if (content && step === "-1") {
+      setStep(String(Number(step) + 1));
+      console.log("content", content);
+    }
+  }, [step, content]);
+  const start = () => {
+    const sse = new SSE("https://api.siliconflow.cn/v1/chat/completions", {
+      method: "POST",
+      start: false,
+      debug: true,
+      headers: {
+        Authorization:
+          "Bearer sk-sdgjqigfyugwuouguoxpmllpikenslumxqlqsoqcpeoojpbi",
+        "Content-Type": "application/json",
+      },
+      payload: JSON.stringify(params),
+    });
+    let t = "";
+    sse.addEventListener("message", (e) => {
+      try {
+        let _t = _.get(e, ["data"], "");
+        if (_t === "[DONE]") {
+          msgs.push({
+            role: "assistant",
+            content: t,
+          });
+          console.log("t", t);
+          t = t.replaceAll("\n", "");
+          t = t.replaceAll(" ", "");
+          t = transfer(t);
+          setContent(t);
+          return;
+        }
+        _t = JSON.parse(_t);
+        _t = _.get(_t, ["choices", "0", "delta", "content"], "");
+        t += _t;
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    sse.stream();
+  };
+
+  const handleClick = (item) => {
+    setStep("-1");
+    setContent(false);
+    setCurrent(false);
+    msgs.push({
+      role: "user",
+      content: item,
+    });
+    const params = {
+      model: "deepseek-ai/DeepSeek-V3",
+      messages: [{ role: "user", content: JSON.stringify(msgs) }],
+      stream: true,
+      max_tokens: 512,
+      temperature: 0.7,
+      top_p: 1,
+      top_k: 1,
+      frequency_penalty: 0,
+      response_format: { type: "text" },
+      n: 1,
+    };
+    let t = "";
+    const sse = new SSE("https://api.siliconflow.cn/v1/chat/completions", {
+      method: "POST",
+      start: false,
+      debug: true,
+      headers: {
+        Authorization:
+          "Bearer sk-sdgjqigfyugwuouguoxpmllpikenslumxqlqsoqcpeoojpbi",
+        "Content-Type": "application/json",
+      },
+      payload: JSON.stringify(params),
+    });
+    sse.addEventListener("message", (e) => {
+      try {
+        let _t = _.get(e, ["data"], "");
+        if (_t === "[DONE]") {
+          msgs.push({
+            role: "assistant",
+            content: t,
+          });
+          console.log("t", t);
+          t = t.replaceAll("\n", "");
+          t = t.replaceAll(" ", "");
+          t = transfer(t);
+          setContent(t);
+          return;
+        }
+        _t = JSON.parse(_t);
+        _t = _.get(_t, ["choices", "0", "delta", "content"], "");
+        t += _t;
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    sse.stream();
+  };
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.npc}>
+        <img src="/img/npc.jpg" alt="" />
+      </div>
+      <div
+        className={styles.content}
+        onClick={() => {
+          setStep(String(Number(step) + 1));
+        }}
+      >
+        {current && current.type !== "option" && (
+          <Typewriter
+            role={current?.name || ""}
+            text={current?.content || ""}
+            // onFinish={() => {
+            //   goNext();
+            // }}
+          />
+        )}
+      </div>
+
+      <div className={styles.backWrap}>
+        <img
+          src="/icons/forward.png"
+          alt=""
+          onClick={() => {
+            start();
+            // setStep("0");
+          }}
+        />
+      </div>
+
+      {current && current.type === "option" && (
+        <div className={styles.selection}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handleClick("选择选项1");
+            }}
+          >
+            {current.content[0]}
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handleClick("选择选项2");
+            }}
+          >
+            {current.content[1]}
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Main;

@@ -38,8 +38,17 @@ const transfer = (list) => {
     if (item.includes("[选项]")) {
       option.content.push(item.replace("[选项]", ""));
     }
+    if (item.includes("[战斗]")) {
+      const fight = item.split("[战斗]");
+      rs.push({
+        type: "fight",
+        content: fight[0],
+      });
+    }
   });
-  rs.push(option);
+  if (option.content.length !== 0) {
+    rs.push(option);
+  }
   return rs;
 };
 const ItemCompontent = () => {
@@ -251,6 +260,26 @@ const Main = () => {
             }}
           >
             {current.content[1]}
+          </Button>
+        </div>
+      )}
+      {current && current.type === "fight" && (
+        <div className={styles.selection}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handleClick("战斗胜利");
+            }}
+          >
+            战斗胜利
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handleClick("战斗失败");
+            }}
+          >
+            战斗失败
           </Button>
         </div>
       )}

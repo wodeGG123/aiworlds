@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styles from "./index.module.scss";
 import Coin from "@/components/Coin";
 import Card from "@/components/Card";
@@ -8,6 +8,7 @@ import CardStory from "@/components/CardStory";
 import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import axios from "axios";
+import Modal from "@mui/material/Modal";
 import systemContent from "./systemContent";
 import { SSE } from "@/lib/sse.js";
 import Typewriter from "../components/TypeWriter";
@@ -72,6 +73,7 @@ let msgs = [
 
 const Main = () => {
   const [status, setStatus] = useState(0);
+  const [open, setOpen] = React.useState(false);
   const [content, setContent] = useState(false);
   const [current, setCurrent] = useState(false);
   const [step, setStep] = useState("-1");
@@ -117,6 +119,7 @@ const Main = () => {
     }
   }, [step, content]);
   const start = () => {
+    setOpen(true);
     const sse = new SSE("https://api.siliconflow.cn/v1/chat/completions", {
       method: "POST",
       start: false,
@@ -142,6 +145,7 @@ const Main = () => {
           t = t.replaceAll(" ", "");
           t = transfer(t);
           setContent(t);
+          setOpen(false);
           return;
         }
         _t = JSON.parse(_t);
@@ -155,6 +159,7 @@ const Main = () => {
   };
 
   const handleClick = (item) => {
+    setOpen(true);
     setStep("-1");
     setContent(false);
     setCurrent(false);
@@ -199,6 +204,7 @@ const Main = () => {
           t = t.replaceAll(" ", "");
           t = transfer(t);
           setContent(t);
+          setOpen(false);
           return;
         }
         _t = JSON.parse(_t);
@@ -210,6 +216,7 @@ const Main = () => {
     });
     sse.stream();
   };
+  const handleClose = () => setOpen(false);
   return (
     <div className={styles.wrap}>
       <div className={styles.npc}>
@@ -283,6 +290,15 @@ const Main = () => {
           </Button>
         </div>
       )}
+      <Modal
+        open={open}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <div className={styles.loadingWrap}>
+          <div className={styles.loader}></div>
+        </div>
+      </Modal>
     </div>
   );
 };

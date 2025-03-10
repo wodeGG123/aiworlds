@@ -1,8 +1,5 @@
 import styles from "./index.module.scss";
 import Drawer from "@mui/material/Drawer";
-import Coin from "@/components/Coin";
-import Card from "@/components/Card";
-import LevelLine from "@/components/LevelLine";
 import { useState } from "react";
 
 const Main = ({ children }: any) => {

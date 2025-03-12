@@ -63,7 +63,7 @@ const ItemCompontent = () => {
     </div>
   );
 };
-let t = "";
+
 let msgs = [
   {
     role: "system",
@@ -77,18 +77,7 @@ const Main = () => {
   const [content, setContent] = useState(false);
   const [current, setCurrent] = useState(false);
   const [step, setStep] = useState("-1");
-  const params = {
-    model: "deepseek-ai/DeepSeek-V3",
-    messages: [{ role: "user", content: JSON.stringify(msgs) }],
-    stream: true,
-    max_tokens: 512,
-    temperature: 0.7,
-    top_p: 1,
-    top_k: 1,
-    frequency_penalty: 0,
-    response_format: { type: "text" },
-    n: 1,
-  };
+
   useEffect(() => {
     // if(current.type === 'narration'){
     // }
@@ -118,8 +107,29 @@ const Main = () => {
       console.log("content", content);
     }
   }, [step, content]);
-  const start = () => {
+  const startAI = (item: any) => {
     setOpen(true);
+    setStep("-1");
+    setContent(false);
+    setCurrent(false);
+    if (item) {
+      msgs.push({
+        role: "user",
+        content: item,
+      });
+    }
+    const params = {
+      model: "deepseek-ai/DeepSeek-V3",
+      messages: [{ role: "user", content: JSON.stringify(msgs) }],
+      stream: true,
+      max_tokens: 512,
+      temperature: 0.7,
+      top_p: 1,
+      top_k: 1,
+      frequency_penalty: 0,
+      response_format: { type: "text" },
+      n: 1,
+    };
     const sse = new SSE("https://api.siliconflow.cn/v1/chat/completions", {
       method: "POST",
       start: false,
@@ -158,63 +168,8 @@ const Main = () => {
     sse.stream();
   };
 
-  const handleClick = (item) => {
-    setOpen(true);
-    setStep("-1");
-    setContent(false);
-    setCurrent(false);
-    msgs.push({
-      role: "user",
-      content: item,
-    });
-    const params = {
-      model: "deepseek-ai/DeepSeek-V3",
-      messages: [{ role: "user", content: JSON.stringify(msgs) }],
-      stream: true,
-      max_tokens: 512,
-      temperature: 0.7,
-      top_p: 1,
-      top_k: 1,
-      frequency_penalty: 0,
-      response_format: { type: "text" },
-      n: 1,
-    };
-    let t = "";
-    const sse = new SSE("https://api.siliconflow.cn/v1/chat/completions", {
-      method: "POST",
-      start: false,
-      debug: true,
-      headers: {
-        Authorization:
-          "Bearer sk-sdgjqigfyugwuouguoxpmllpikenslumxqlqsoqcpeoojpbi",
-        "Content-Type": "application/json",
-      },
-      payload: JSON.stringify(params),
-    });
-    sse.addEventListener("message", (e) => {
-      try {
-        let _t = _.get(e, ["data"], "");
-        if (_t === "[DONE]") {
-          msgs.push({
-            role: "assistant",
-            content: t,
-          });
-          console.log("t", t);
-          t = t.replaceAll("\n", "");
-          t = t.replaceAll(" ", "");
-          t = transfer(t);
-          setContent(t);
-          setOpen(false);
-          return;
-        }
-        _t = JSON.parse(_t);
-        _t = _.get(_t, ["choices", "0", "delta", "content"], "");
-        t += _t;
-      } catch (error) {
-        console.log(error);
-      }
-    });
-    sse.stream();
+  const handleClick = (item: any) => {
+    startAI(item);
   };
   const handleClose = () => setOpen(false);
   return (
@@ -244,8 +199,7 @@ const Main = () => {
           src="/icons/forward.png"
           alt=""
           onClick={() => {
-            start();
-            // setStep("0");
+            startAI('');
           }}
         />
       </div>

@@ -108,28 +108,6 @@ const Main = () => {
       console.log("content", content);
     }
   }, [step, content]);
-  const textTransfer = (_t: string) => {
-    try {
-      if (_t === "[DONE]") {
-        msgs.push({
-          role: "assistant",
-          content: t,
-        });
-        console.log("t", t);
-        t = t.replaceAll("\n", "");
-        t = t.replaceAll(" ", "");
-        t = transfer(t);
-        setContent(t);
-        setOpen(false);
-        return;
-      }
-      _t = JSON.parse(_t);
-      _t = _.get(_t, ["choices", "0", "delta", "content"], "");
-      t += _t;
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const startAI = (item: any) => {
     setOpen(true);
     setStep("-1");
@@ -168,7 +146,27 @@ const Main = () => {
     });
     let t = "";
     sse.addEventListener("message", (e) => {
-      textTransfer(_.get(e, ["data"], ""));
+      try {
+        let _t = _.get(e, ["data"], "");
+        if (_t === "[DONE]") {
+          msgs.push({
+            role: "assistant",
+            content: t,
+          });
+          console.log("t", t);
+          t = t.replaceAll("\n", "");
+          t = t.replaceAll(" ", "");
+          t = transfer(t);
+          setContent(t);
+          setOpen(false);
+          return;
+        }
+        _t = JSON.parse(_t);
+        _t = _.get(_t, ["choices", "0", "delta", "content"], "");
+        t += _t;
+      } catch (error) {
+        console.log(error);
+      }
     });
     sse.stream();
   };

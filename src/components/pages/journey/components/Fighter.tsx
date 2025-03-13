@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Typewriter from "../components/TypeWriter";
 
-let progressTXT = "";
+let progressTXT = [];
+let res = "战斗胜利";
 class GameCharacter {
   constructor(name, options = {}) {
     // 基础属性
@@ -46,11 +47,11 @@ class GameCharacter {
       const t = `${this.name}${isCrit ? "暴击！" : ""}对${
         target.name
       } 造成${damage}点伤害`;
-      progressTXT += t;
+      progressTXT.push(t);
       console.log(t);
     } else {
       const t = `${target.name} 防御了本次攻击`;
-      progressTXT += t;
+      progressTXT.push(t);
       console.log(t);
     }
   }
@@ -60,7 +61,7 @@ class GameCharacter {
   receiveDamage(damage) {
     if (Math.random() < this.dodgeRate) {
       const t = `${this.name} 闪避了攻击！`;
-      progressTXT += t;
+      progressTXT.push(t);
       console.log(t);
       return;
     }
@@ -70,7 +71,7 @@ class GameCharacter {
     if (this.health === 0) {
       this.status = "dead";
       const t = `${this.name} 已阵亡`;
-      progressTXT += t;
+      progressTXT.push(t);
       console.log(t);
     }
   }
@@ -80,7 +81,7 @@ class GameCharacter {
   heal(amount) {
     this.health = Math.min(this.maxHealth, this.health + amount);
     const t = `${this.name} 恢复${amount}点生命，当前生命值：${this.health}`;
-    progressTXT += t;
+    progressTXT.push(t);
     console.log(t);
   }
 }
@@ -110,13 +111,13 @@ class BattleManager {
 
   startBattle() {
     const t = "=====  战斗开始! =====";
-    progressTXT += t;
+    progressTXT.push(t);
     console.log(t);
 
     while (true) {
       // 获取存活成员并按速度排序
-      const t = `\n===  第 ${this.round}  回合 ===`;
-      progressTXT += t;
+      const t = `===  第 ${this.round}  回合 ===`;
+      progressTXT.push(t);
       console.log(t);
       const aliveA = this.getAliveMembers(this.teamA);
 
@@ -141,16 +142,20 @@ class BattleManager {
         fighter.attackTarget(target); // 实时检查战斗状态
 
         if (this.checkTeamDefeated(this.teamB)) {
-          const t = "\n=====  队伍A 胜利! =====";
-          progressTXT += t;
+          const t = "=====  我方 胜利! =====";
+          progressTXT.push(t);
           console.log(t);
+          console.log(progressTXT);
+          res = "战斗胜利";
           return;
         }
 
         if (this.checkTeamDefeated(this.teamA)) {
-          const t = "\n=====  队伍B 胜利! =====";
-          progressTXT += t;
+          const t = "=====  敌方 胜利! =====";
+          progressTXT.push(t);
           console.log(t);
+          console.log(progressTXT);
+          res = "战斗失败";
           return;
         }
       }
@@ -161,31 +166,47 @@ class BattleManager {
         // 防止无限循环
 
         const t = "战斗超时，判定平局！";
-        progressTXT += t;
+        progressTXT.push(t);
         console.log(t);
+        console.log(progressTXT);
         break;
       }
     }
   }
 }
 
-const Main = () => {
+const Main = ({ onClick = () => {} }: any) => {
+  const [battle, setBattle] = useState(false);
   useEffect(() => {
     // 测试用例
 
     const teamA = [
-      new GameCharacter("红方战士", { attack: 15, health: 120 }),
-      new GameCharacter("红方法师", { attack: 20, defense: 2 }),
+      new GameCharacter("百事【我方】", { attack: 15, health: 120 }),
+      new GameCharacter("孙悟空【我方】", { attack: 20, defense: 2 }),
     ];
 
     const teamB = [
-      new GameCharacter("蓝方刺客", { attack: 18, speed: 120 }),
-      new GameCharacter("蓝方牧师", { defense: 8, health: 150 }),
+      new GameCharacter("鳌拜【敌方】", { attack: 18, speed: 120 }),
+      new GameCharacter("方唐镜【敌方】", { defense: 8, health: 150 }),
     ];
 
     const battle = new BattleManager(teamA, teamB);
     battle.startBattle();
+    setTimeout(() => {
+      setBattle(true);
+    }, 100);
   }, []);
-  return <></>;
+  return (
+    <div
+      onClick={() => {
+        onClick(res);
+      }}
+    >
+      {battle &&
+        progressTXT.map((item) => (
+          <p style={{ textAlign: "center" }}>{item}</p>
+        ))}
+    </div>
+  );
 };
 export default Main;

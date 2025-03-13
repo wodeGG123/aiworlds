@@ -12,6 +12,7 @@ import Modal from "@mui/material/Modal";
 import systemContent from "./systemContent";
 import { SSE } from "@/lib/sse.js";
 import Typewriter from "../components/TypeWriter";
+import Fighter from "../components/Fighter";
 import _ from "lodash";
 
 const transfer = (list) => {
@@ -113,6 +114,8 @@ const Main = () => {
     setContent(false);
     setCurrent(false);
     if (item) {
+      console.log(item);
+
       msgs.push({
         role: "user",
         content: item,
@@ -183,13 +186,20 @@ const Main = () => {
           setStep(String(Number(step) + 1));
         }}
       >
-        {current && current.type !== "option" && (
+        {current && current.type !== "option" && current.type !== "fight" && (
           <Typewriter
             role={current?.name || ""}
             text={current?.content || ""}
             // onFinish={() => {
             //   goNext();
             // }}
+          />
+        )}
+        {current && current.type === "fight" && (
+          <Fighter
+            onClick={(res: any) => {
+              handleClick(res);
+            }}
           />
         )}
       </div>
@@ -199,7 +209,7 @@ const Main = () => {
           src="/icons/forward.png"
           alt=""
           onClick={() => {
-            startAI('');
+            startAI("");
           }}
         />
       </div>
@@ -224,7 +234,7 @@ const Main = () => {
           </Button>
         </div>
       )}
-      {current && current.type === "fight" && (
+      {/* {current && current.type === "fight" && (
         <div className={styles.selection}>
           <Button
             variant="outlined"
@@ -243,7 +253,8 @@ const Main = () => {
             战斗失败
           </Button>
         </div>
-      )}
+      )} */}
+
       <Modal
         open={open}
         aria-labelledby="modal-modal-title"

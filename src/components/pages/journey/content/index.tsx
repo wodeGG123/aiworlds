@@ -14,7 +14,17 @@ import { SSE } from "@/lib/sse.js";
 import Typewriter from "../components/TypeWriter";
 import Fighter from "../components/Fighter";
 import _ from "lodash";
-
+function replaceAllEscapes(str) {
+  // 替换实际特殊字符
+  str = str.replace(/[\r\n\t\f\v]/g, " ");
+  // 替换字面转义符
+  str = str.replace(/\\(.)/g, (match, char) => {
+    // 可根据需要处理特定转义符，例如保留反斜杠本身
+    if (char === "\\") return "\\"; // 保留双反斜杠中的一个
+    return " "; // 其他转义符替换为空格
+  });
+  return str;
+}
 const transfer = (list) => {
   let rs = [];
   let _list = list.split("$");
@@ -171,8 +181,10 @@ const Main = () => {
             content: t,
           });
           console.log("t", t);
-          t = t.replaceAll("\n", "");
-          t = t.replaceAll(" ", "");
+          // t = t.replaceAll("\\n", "");
+          // t = t.replaceAll("\\", "");
+          // t = t.replaceAll(" ", "");
+          t = replaceAllEscapes(t);
           t = transfer(t);
           setContent(t);
           setOpen(false);

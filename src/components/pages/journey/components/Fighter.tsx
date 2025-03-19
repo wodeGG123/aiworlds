@@ -197,8 +197,10 @@ const Main = ({ onClick = () => {}, elm = [] }: any) => {
   }, []);
   return (
     <div
-      onClick={() => {
+      onClick={(e) => {
         onClick(res);
+        e.preventDefault();
+        e.stopPropagation();
       }}
     >
       {battle &&

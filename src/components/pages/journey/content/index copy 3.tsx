@@ -14,62 +14,9 @@ import { SSE } from "@/lib/sse.js";
 import Typewriter from "../components/TypeWriter";
 import Fighter from "../components/Fighter";
 import _ from "lodash";
+let completeText = "";
+let currentText = "";
 
-const transfer = (list) => {
-  let rs = [];
-  let _list = list.split("$");
-  let option: any = {
-    type: "option",
-    content: [],
-  };
-  let fight: any = {
-    type: "fight",
-    content: [],
-  };
-  _list.forEach((item) => {
-    if (item.includes("[旁白]")) {
-      rs.push({
-        type: "narration",
-        content: item.replace("[旁白]", ""),
-      });
-    }
-    if (item.includes("[对话]")) {
-      const dialog = item.replace("[对话]", "").split("=>");
-      rs.push({
-        type: "dialogue",
-        name: dialog[0].replace("(", "").replace(")", ""),
-        content: dialog[1],
-      });
-    }
-    if (item.includes("[选项]")) {
-      option.content.push(item.replace("[选项]", ""));
-    }
-    if (item.includes("[战斗]")) {
-      const _fight = item.split("[战斗]");
-      if (_fight[0].includes("=>")) {
-        const fighter = _fight[0].split("=>");
-        fight.content.push({
-          name: fighter[0],
-          attack: fighter[1],
-          defense: fighter[2],
-          health: fighter[3],
-          speed: fighter[4],
-        });
-      }
-      // rs.push({
-      //   type: "fight",
-      //   content: fight[0],
-      // });
-    }
-  });
-  if (option.content.length !== 0) {
-    rs.push(option);
-  }
-  if (fight.content.length !== 0) {
-    rs.push(fight);
-  }
-  return rs;
-};
 const ItemCompontent = () => {
   return (
     <div className={styles.contentItem}>
@@ -100,31 +47,71 @@ const Main = () => {
     // if(current.type === 'narration'){
     // }
   }, [current]);
+  const getCurrent = () => {
+    const types = [
+      {
+        type: "narration",
+        label: "旁白",
+      },
+      {
+        type: "dialogue",
+        label: "对话",
+      },
+      {
+        type: "option",
+        label: "选项",
+      },
+      {
+        type: "fight",
+        label: "战斗",
+      },
+    ];
 
-  useEffect(() => {
-    console.log("step", step);
-    if (step !== "-1" && content) {
-      setCurrent(false);
-      setTimeout(() => {
-        if (Number(step) >= content.length) {
-          debugger;
-          setStep("-1");
-          setContent(false);
-          setCurrent(false);
-          return;
-        } else {
-          const _current = content[Number(step)];
-          setCurrent(_current);
-        }
-      }, 100);
+    if (currentText.includes(`[旁白]`)) {
+      if (currentText.includes(`$`)) {
+        // debugger;
+        currentText = "";
+      } else {
+        setCurrent({
+          type: `narration`,
+          content: currentText.replace(`[旁白]`, ""),
+        });
+      }
     }
-  }, [step, content]);
-  useEffect(() => {
-    if (content && step === "-1") {
-      setStep(String(Number(step) + 1));
-      console.log("content", content);
+    if (currentText.includes(`[对话]`) && currentText.includes(`$`)) {
+      let _t = currentText.replace(`[对话]`, "").replace(`$`, "");
+      const dialog = _t.split("=>");
+      setCurrent({
+        type: "dialogue",
+        name: dialog[0].replace("(", "").replace(")", ""),
+        content: dialog[1],
+      });
+      currentText = "";
     }
-  }, [step, content]);
+  };
+
+  const textTransfer = (_t: string) => {
+    try {
+      if (_t === "[DONE]") {
+        msgs.push({
+          role: "assistant",
+          content: completeText,
+        });
+        console.log("completeText", completeText);
+        completeText = completeText.replaceAll("\n", "");
+        completeText = completeText.replaceAll(" ", "");
+        console.log("completeText", completeText);
+        return;
+      }
+      _t = JSON.parse(_t);
+      _t = _.get(_t, ["choices", "0", "delta", "content"], "");
+      completeText += _t;
+      currentText += _t;
+      getCurrent();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const startAI = (item: any) => {
     setOpen(true);
     setStep("-1");
@@ -161,29 +148,10 @@ const Main = () => {
       },
       payload: JSON.stringify(params),
     });
-    let t = "";
+
     sse.addEventListener("message", (e) => {
-      try {
-        let _t = _.get(e, ["data"], "");
-        if (_t === "[DONE]") {
-          msgs.push({
-            role: "assistant",
-            content: t,
-          });
-          console.log("t", t);
-          t = t.replaceAll("\n", "");
-          t = t.replaceAll(" ", "");
-          t = transfer(t);
-          setContent(t);
-          setOpen(false);
-          return;
-        }
-        _t = JSON.parse(_t);
-        _t = _.get(_t, ["choices", "0", "delta", "content"], "");
-        t += _t;
-      } catch (error) {
-        console.log(error);
-      }
+      textTransfer(_.get(e, ["data"], ""));
+      setOpen(false);
     });
     sse.stream();
   };
@@ -203,18 +171,12 @@ const Main = () => {
           setStep(String(Number(step) + 1));
         }}
       >
-        {current && current.type !== "option" && current.type !== "fight" && (
-          <Typewriter
-            role={current?.name || ""}
-            text={current?.content || ""}
-            // onFinish={() => {
-            //   goNext();
-            // }}
-          />
-        )}
+        {current &&
+          current.type !== "option" &&
+          current.type !== "fight" &&
+          current?.content}
         {current && current.type === "fight" && (
           <Fighter
-            elm={current.content}
             onClick={(res: any) => {
               handleClick(res);
             }}

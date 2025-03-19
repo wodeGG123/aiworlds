@@ -175,20 +175,19 @@ class BattleManager {
   }
 }
 
-const Main = ({ onClick = () => {} }: any) => {
+const Main = ({ onClick = () => {}, elm = [] }: any) => {
+  debugger;
   const [battle, setBattle] = useState(false);
   useEffect(() => {
     // 测试用例
+    const A = ["百事", "丘处机", "一灯大师", "王重阳"];
+    const teamA = elm.map((item: any, index: number) => {
+      return new GameCharacter(`${A[index]}【我方】`, { ...item });
+    });
 
-    const teamA = [
-      new GameCharacter("百事【我方】", { attack: 15, health: 120 }),
-      new GameCharacter("孙悟空【我方】", { attack: 20, defense: 2 }),
-    ];
-
-    const teamB = [
-      new GameCharacter("鳌拜【敌方】", { attack: 18, speed: 120 }),
-      new GameCharacter("方唐镜【敌方】", { defense: 8, health: 150 }),
-    ];
+    const teamB = elm.map((item: any) => {
+      return new GameCharacter(`${item.name}【敌方】`, { ...item });
+    });
 
     const battle = new BattleManager(teamA, teamB);
     battle.startBattle();

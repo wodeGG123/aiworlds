@@ -15,9 +15,9 @@ class GameCharacter {
 
     this.occupation = "战士"; // 职业分类 [9]() // 战斗核心属性
 
-    this.attack = options.attack || 10; // 攻击力 [1]()[8]()
+    this.attack = Math.max(options.attack, options.defense) || 10; // 攻击力 [1]()[8]()
 
-    this.defense = options.defense || 5; // 防御力 [13]()
+    this.defense = Math.min(options.attack, options.defense) || 5; // 防御力 [13]()
 
     this.speed = options.speed || 100; // 速度 [13]()
 

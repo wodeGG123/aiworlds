@@ -1,213 +1,402 @@
 import { useEffect, useState } from "react";
-import Typewriter from "../components/TypeWriter";
-
-let progressTXT = [];
+import styles from "./index.module.scss";
+import Coin from "@/components/Coin";
+import Card from "@/components/Card";
+import LevelLine from "@/components/LevelLine";
+import CardFight from "@/components/CardFight";
 let res = "战斗胜利";
-class GameCharacter {
-  constructor(name, options = {}) {
-    // 基础属性
-
-    this.name = name; // 角色名称 [1]()
-
-    this.level = 1; // 等级 [6]()
-
-    this.exp = 0; // 经验值 [6]()
-
-    this.occupation = "战士"; // 职业分类 [9]() // 战斗核心属性
-
-    this.attack = Math.max(options.attack, options.defense) || 10; // 攻击力 [1]()[8]()
-
-    this.defense = Math.min(options.attack, options.defense) || 5; // 防御力 [13]()
-
-    this.speed = options.speed || 100; // 速度 [13]()
-
-    this.health = options.health || 100; // 血量 [1]()
-
-    this.maxHealth = this.health; // 最大血量 [13]() // 扩展属性
-
-    this.critRate = 0.1; // 暴击率 [13]()
-
-    this.dodgeRate = 0.05; // 闪避率 [13]()
-
-    this.status = "alive"; // 状态（alive/dead） [9]()
-  }
-
-  // 攻击方法 [1]()[8]()
-
-  attackTarget(target) {
-    const isCrit = Math.random() < this.critRate;
-
-    const damage = isCrit
-      ? Math.floor(this.attack * 1.5 - target.defense)
-      : Math.floor(this.attack - target.defense);
-
-    if (damage > 0) {
-      target.receiveDamage(damage);
-
-      const t = `${this.name}${isCrit ? "暴击！" : ""}对${
-        target.name
-      } 造成${damage}点伤害`;
-      progressTXT.push(t);
-      console.log(t);
-    } else {
-      const t = `${target.name} 防御了本次攻击`;
-      progressTXT.push(t);
-      console.log(t);
-    }
-  }
-
-  // 承受伤害 [13]()
-
-  receiveDamage(damage) {
-    if (Math.random() < this.dodgeRate) {
-      const t = `${this.name} 闪避了攻击！`;
-      progressTXT.push(t);
-      console.log(t);
-      return;
-    }
-
-    this.health = Math.max(0, this.health - damage);
-
-    if (this.health === 0) {
-      this.status = "dead";
-      const t = `${this.name} 已阵亡`;
-      progressTXT.push(t);
-      console.log(t);
-    }
-  }
-
-  // 恢复血量 [13]()
-
-  heal(amount) {
-    this.health = Math.min(this.maxHealth, this.health + amount);
-    const t = `${this.name} 恢复${amount}点生命，当前生命值：${this.health}`;
-    progressTXT.push(t);
-    console.log(t);
-  }
-}
-
-class BattleManager {
-  constructor(teamA, teamB) {
-    this.teamA = teamA; // 队伍A
-
-    this.teamB = teamB; // 队伍B
-
-    this.round = 1; // 当前回合数
-  }
-
-  // 判断队伍状态
-
-  checkTeamDefeated(team) {
-    return team.every((c) => c.status === "dead");
-  }
-
-  // 获取存活角色列表
-
-  getAliveMembers(team) {
-    return team.filter((c) => c.status === "alive");
-  }
-
-  // 战斗主循环
-
-  startBattle() {
-    const t = "=====  战斗开始! =====";
-    progressTXT.push(t);
-    console.log(t);
-
-    while (true) {
-      // 获取存活成员并按速度排序
-      const t = `===  第 ${this.round}  回合 ===`;
-      progressTXT.push(t);
-      console.log(t);
-      const aliveA = this.getAliveMembers(this.teamA);
-
-      const aliveB = this.getAliveMembers(this.teamB);
-
-      const allFighters = [...aliveA, ...aliveB].sort(
-        (a, b) => b.speed - a.speed
-      ); // 执行角色行动
-
-      for (const fighter of allFighters) {
-        if (fighter.status === "dead") continue; // 确定攻击目标阵营
-
-        const isAttackerA = this.teamA.includes(fighter);
-
-        const targetTeam = isAttackerA ? aliveB : aliveA;
-
-        if (targetTeam.length === 0) break; // 随机选择目标
-
-        const target =
-          targetTeam[Math.floor(Math.random() * targetTeam.length)];
-
-        fighter.attackTarget(target); // 实时检查战斗状态
-
-        if (this.checkTeamDefeated(this.teamB)) {
-          const t = "=====  我方 胜利! =====";
-          progressTXT.push(t);
-          console.log(t);
-          console.log(progressTXT);
-          res = "战斗胜利";
-          return;
-        }
-
-        if (this.checkTeamDefeated(this.teamA)) {
-          const t = "=====  敌方 胜利! =====";
-          progressTXT.push(t);
-          console.log(t);
-          console.log(progressTXT);
-          res = "战斗失败";
-          return;
-        }
-      }
-
-      this.round++;
-
-      if (this.round > 100) {
-        // 防止无限循环
-
-        const t = "战斗超时，判定平局！";
-        progressTXT.push(t);
-        console.log(t);
-        console.log(progressTXT);
-        break;
-      }
-    }
-  }
-}
-
-const Main = ({ onClick = () => {}, elm = [] }: any) => {
-  debugger;
-  const [battle, setBattle] = useState(false);
-  useEffect(() => {
-    // 测试用例
-    const A = ["百事", "丘处机", "一灯大师", "王重阳"];
-    const teamA = elm.map((item: any, index: number) => {
-      return new GameCharacter(`${A[index]}【我方】`, { ...item });
-    });
-
-    const teamB = elm.map((item: any) => {
-      return new GameCharacter(`${item.name}【敌方】`, { ...item });
-    });
-
-    const battle = new BattleManager(teamA, teamB);
-    battle.startBattle();
-    setTimeout(() => {
-      setBattle(true);
-    }, 100);
-  }, []);
+const logs = [];
+const ItemCompontent = () => {
   return (
-    <div
-      onClick={(e) => {
-        onClick(res);
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
-      {battle &&
-        progressTXT.map((item) => (
-          <p style={{ textAlign: "center" }}>{item}</p>
-        ))}
+    <div className={styles.contentItem}>
+      <Card size="small" />
+      <div className={styles.swalWrap}>
+        <LevelLine />
+        <p>曹操 +3</p>
+      </div>
     </div>
   );
 };
+
+const Main = ({ onClick = () => {}, elm = [] }) => {
+  const [status, setStatus] = useState(0);
+  const [log, setLog] = useState("");
+  const [roundNumber, setRoundNumber] = useState(0);
+  const [actionCharacter, setActionCharacter] = useState("");
+  const [_teamA, set_teamA] = useState([]);
+  const [_teamB, set_teamB] = useState([]);
+  useEffect(() => {
+    // 基础设定
+    const battleMode = "多角色小队战";
+    const characterAttributes = {
+      health: 0,
+      attack: 0,
+      defense: 0,
+      speed: 0,
+    };
+    const skillTypes = ["物理攻击", "魔法攻击", "治疗"];
+    const skillTrigger = { type: "概率触发", probability: 1 };
+    const winCondition = "全灭敌方";
+    // 角色类
+    class Character {
+      constructor(name, attributes) {
+        this.name = name;
+        this.health = attributes.health;
+        this.attack = attributes.attack;
+        this.defense = attributes.defense;
+        this.speed = attributes.speed;
+        this.isAlive = true;
+        this.isAttack = false;
+        this.isAttacked = false;
+      }
+
+      // 物理攻击技能
+      physicalAttack(target) {
+        if (Math.random() < skillTrigger.probability) {
+          let damage = this.attack - target.defense;
+          if (damage < 0) damage = 0;
+          target.health -= damage;
+          if (target.health <= 0) {
+            target.health = 0;
+            target.isAlive = false;
+          }
+          this.uiChange(target);
+          return `[${this.name}]  使用物理攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
+        }
+
+        return `[${this.name}]  物理攻击未触发`;
+      }
+
+      // 魔法攻击技能
+      magicAttack(target) {
+        if (Math.random() < skillTrigger.probability) {
+          let damage = this.attack - target.defense;
+          if (damage < 0) damage = 0;
+          target.health -= damage;
+          if (target.health <= 0) {
+            target.health = 0;
+            target.isAlive = false;
+          }
+          this.uiChange(target);
+          return `[${this.name}]  使用魔法攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
+        }
+        return `[${this.name}]  魔法攻击未触发`;
+      }
+
+      // 治疗技能
+      heal() {
+        if (Math.random() < skillTrigger.probability) {
+          const healAmount = Math.floor(Math.random() * 10) + 1;
+          this.health += healAmount;
+          return `[${this.name}]  使用治疗技能恢复了 ${healAmount} 点生命值`;
+        }
+        this.uiChange();
+        return `[${this.name}]  治疗技能未触发`;
+      }
+      uiChange(target) {
+        this.isAttack = true;
+        if (target) {
+          target.isAttacked = true;
+        }
+
+        setTimeout(() => {
+          this.isAttack = false;
+
+          if (target) {
+            target.isAttacked = false;
+          }
+        }, 100);
+      }
+    }
+    // 战斗系统类
+    class BattleSystem {
+      constructor(teamA, teamB) {
+        this.teamA = teamA;
+        this.teamB = teamB;
+        this.round = 0;
+        this.isAutoBattle = false;
+        this.isPaused = false;
+        this.animationSkipped = false;
+        this.rounding = false;
+      }
+
+      // 初始化界面
+      initUI() {
+        set_teamA([...this.teamA]);
+        set_teamB([...this.teamB]);
+      }
+
+      // 更新界面
+      updateUI() {
+        set_teamA([...this.teamA]);
+        set_teamB([...this.teamB]);
+      }
+
+      // 检查是否满足胜利条件
+      checkWinCondition() {
+        const teamAAlive = this.teamA.some((character) => character.isAlive);
+        const teamBAlive = this.teamB.some((character) => character.isAlive);
+        if (!teamAAlive) {
+          res = "战斗失败";
+          setStatus(2);
+          return "Team B 胜利";
+        } else if (!teamBAlive) {
+          res = "战斗胜利";
+          setStatus(3);
+          return "Team A 胜利";
+        }
+        return null;
+      }
+
+      // 速度决定行动顺序
+      getActionOrder() {
+        const allCharacters = [...this.teamA, ...this.teamB].filter(
+          (character) => character.isAlive
+        );
+        return allCharacters.sort((a, b) => b.speed - a.speed);
+      }
+
+      // 一个回合的战斗流程
+      async roundBattle() {
+        this.round++;
+        setRoundNumber(this.round);
+        const actionOrder = this.getActionOrder();
+        for (let i = 0; i < actionOrder.length; i++) {
+          const currentCharacter = actionOrder[i];
+          setActionCharacter(currentCharacter.name);
+          let log = "";
+          if (this.teamA.includes(currentCharacter)) {
+            const aliveEnemies = this.teamB.filter(
+              (character) => character.isAlive
+            );
+            if (aliveEnemies.length > 0) {
+              const target =
+                aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+              const skillIndex = Math.floor(Math.random() * skillTypes.length);
+              switch (skillTypes[skillIndex]) {
+                case "物理攻击":
+                  log = currentCharacter.physicalAttack(target);
+                  break;
+                case "魔法攻击":
+                  log = currentCharacter.magicAttack(target);
+                  break;
+                case "治疗":
+                  log = currentCharacter.heal();
+                  break;
+              }
+            }
+          } else {
+            // AI 行为：随机攻击
+            const aliveEnemies = this.teamA.filter(
+              (character) => character.isAlive
+            );
+            if (aliveEnemies.length > 0) {
+              const target =
+                aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+              const skillIndex = Math.floor(Math.random() * skillTypes.length);
+              switch (skillTypes[skillIndex]) {
+                case "物理攻击":
+                  log = currentCharacter.physicalAttack(target);
+                  break;
+                case "魔法攻击":
+                  log = currentCharacter.magicAttack(target);
+                  break;
+                case "治疗":
+                  log = currentCharacter.heal();
+                  break;
+              }
+            }
+          }
+          setLog(log);
+          logs.push(log);
+          this.updateUI();
+          const winResult = this.checkWinCondition();
+          if (winResult) {
+            alert(winResult);
+            console.log(logs.join("\n"));
+
+            return;
+          }
+          await new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(1);
+            }, 1000);
+          });
+        }
+        this.rounding = false;
+      }
+
+      // 自动战斗
+      async autoBattle() {
+        this.isAutoBattle = true;
+        if (!this.rounding) {
+          if (!this.isPaused) {
+            const winResult = this.checkWinCondition();
+            if (!winResult) {
+              this.rounding = true;
+              await this.roundBattle();
+              await this.autoBattle();
+            }
+          }
+        }
+      }
+    }
+    const A = ["百事", "丘处机", "一灯大师", "王重阳"];
+
+    // 创建角色
+    // const characterA1 = new Character("A1", {
+    //   health: 100,
+    //   attack: 20,
+    //   defense: 10,
+    //   speed: 15,
+    // });
+    // const characterA2 = new Character("A2", {
+    //   health: 100,
+    //   attack: 25,
+    //   defense: 8,
+    //   speed: 20,
+    // });
+    // const characterB1 = new Character("B1", {
+    //   health: 100,
+    //   attack: 18,
+    //   defense: 12,
+    //   speed: 12,
+    // });
+    // const characterB2 = new Character("B2", {
+    //   health: 100,
+    //   attack: 22,
+    //   defense: 9,
+    //   speed: 18,
+    // });
+
+    // const teamA = [characterA1, characterA2];
+    // const teamB = [characterB1, characterB2];
+    const teamA = elm.map((item: any, index: number) => {
+      return new Character(`${A[index]}【我方】`, {
+        health: 100,
+        attack: Number(item.attack),
+        defense: Number(item.defense),
+        speed: Number(item.speed),
+      });
+    });
+    const teamB = elm.map((item: any) => {
+      return new Character(`${item.name}【敌方】`, {
+        health: 100,
+        attack: Math.max(Number(item.attack), Number(item.defense)) + 10,
+        defense: Math.min(Number(item.attack), Number(item.defense)) - 10,
+        speed: Number(item.speed),
+      });
+    });
+    const battleSystem = new BattleSystem(teamA, teamB);
+    battleSystem.initUI();
+    battleSystem.autoBattle();
+  }, []);
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.buttons}>
+        {/* <button id="auto-battle">自动战斗</button>
+        <button id="pause" disabled>
+          暂停
+        </button>
+        <button id="skip-animation">跳过动画</button> */}
+        <div id="info-display">
+          <p>
+            当前回合数: <span id="round-number">{roundNumber}</span>
+          </p>
+          <p>
+            行动角色: <span id="action-character">{actionCharacter}</span>
+          </p>
+          <p>
+            战斗日志: <span id="battle-log">{log}</span>
+          </p>
+        </div>
+      </div>
+      <div className={styles.enemy}>
+        <div>
+          {_teamB.map((item: any) => {
+            return <CardFight name="曹操" level="3" data={item} />;
+          })}
+        </div>
+      </div>
+      <div className={styles.myArmy}>
+        <img
+          src="/icons/seal.png"
+          alt=""
+          className={styles.seal}
+          onClick={() => {
+            setStatus(1);
+          }}
+        />
+        <div>
+          {_teamA.map((item: any) => {
+            return <CardFight name="曹操" level="3" data={item} type={0} />;
+          })}
+        </div>
+      </div>
+      {status === 1 && (
+        <div className={styles.status}>
+          <img
+            src="/icons/capture-successful.png"
+            alt=""
+            onClick={() => {
+              setStatus(2);
+            }}
+          />
+        </div>
+      )}
+      {status === 2 && (
+        <div className={styles.status}>
+          <img
+            src="/icons/capture-failed.png"
+            alt=""
+            onClick={() => {
+              setStatus(3);
+            }}
+          />
+        </div>
+      )}
+      {status === 3 && (
+        <div className={styles.status}>
+          <img
+            src="/icons/succsess.png"
+            alt=""
+            onClick={(e) => {
+              onClick(res);
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          />
+          <p>经验: +3264</p>
+          <p>金币: +236</p>
+        </div>
+      )}
+      {status === 4 && (
+        <div className={styles.status}>
+          <img
+            src="/icons/failed.png"
+            alt=""
+            onClick={(e) => {
+              onClick(res);
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          />
+        </div>
+      )}
+      {status === 5 && (
+        <div className={styles.status}>
+          <img src="/icons/bingo.png" alt="" />
+          <p>获得命运卡</p>
+          <div>
+            <img src="/img/jn1.png" alt="" />
+            <img src="/img/jn1.png" alt="" />
+            <img src="/img/jn1.png" alt="" />
+            <img src="/img/jn1.png" alt="" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default Main;

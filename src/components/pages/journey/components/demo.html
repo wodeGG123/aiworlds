@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>回合制战斗系统</title>
+    <style>
+      /* 简单的样式，用于显示生命条 */
+      .life-bar {
+        width: 100px;
+        height: 10px;
+        background-color: red;
+      }
+
+      .life {
+        height: 100%;
+        background-color: green;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="battle-field">
+      <!-- 角色显示区域 -->
+      <div id="character-display"></div>
+      <!-- 操作面板 -->
+      <div id="operation-panel">
+        <button id="auto-battle">自动战斗</button>
+        <button id="pause" disabled>暂停</button>
+        <button id="skip-animation">跳过动画</button>
+        <div id="info-display">
+          <p>当前回合数: <span id="round-number">0</span></p>
+          <p>行动角色: <span id="action-character"></span></p>
+          <p>战斗日志: <span id="battle-log"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 基础设定
+      const battleMode = "多角色小队战";
+      const characterAttributes = {
+        health: 0,
+        attack: 0,
+        defense: 0,
+        speed: 0,
+      };
+      const skillTypes = ["物理攻击", "魔法攻击", "治疗"];
+      const skillTrigger = { type: "概率触发", probability: 1 };
+      const winCondition = "全灭敌方";
+
+      // 角色类
+      class Character {
+        constructor(name, attributes) {
+          this.name = name;
+          this.health = attributes.health;
+          this.attack = attributes.attack;
+          this.defense = attributes.defense;
+          this.speed = attributes.speed;
+          this.isAlive = true;
+        }
+
+        // 物理攻击技能
+        physicalAttack(target) {
+          if (Math.random() < skillTrigger.probability) {
+            let damage = this.attack - target.defense;
+            if (damage < 0) damage = 0;
+            target.health -= damage;
+            if (target.health <= 0) {
+              target.health = 0;
+              target.isAlive = false;
+            }
+            return `[${this.name}]  使用物理攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
+          }
+          return `[${this.name}]  物理攻击未触发`;
+        }
+
+        // 魔法攻击技能
+        magicAttack(target) {
+          if (Math.random() < skillTrigger.probability) {
+            let damage = this.attack - target.defense;
+            if (damage < 0) damage = 0;
+            target.health -= damage;
+            if (target.health <= 0) {
+              target.health = 0;
+              target.isAlive = false;
+            }
+            return `[${this.name}]  使用魔法攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
+          }
+          return `[${this.name}]  魔法攻击未触发`;
+        }
+
+        // 治疗技能
+        heal() {
+          if (Math.random() < skillTrigger.probability) {
+            const healAmount = Math.floor(Math.random() * 10) + 1;
+            this.health += healAmount;
+            return `[${this.name}]  使用治疗技能恢复了 ${healAmount} 点生命值`;
+          }
+          return `[${this.name}]  治疗技能未触发`;
+        }
+      }
+
+      // 战斗系统类
+      class BattleSystem {
+        constructor(teamA, teamB) {
+          this.teamA = teamA;
+          this.teamB = teamB;
+          this.round = 0;
+          this.isAutoBattle = false;
+          this.isPaused = false;
+          this.animationSkipped = false;
+        }
+
+        // 初始化界面
+        initUI() {
+          const characterDisplay = document.getElementById("character-display");
+          const allCharacters = [...this.teamA, ...this.teamB];
+          for (let i = 0; i < allCharacters.length; i++) {
+            const characterDiv = document.createElement("div");
+            characterDiv.textContent = allCharacters[i].name;
+            const lifeBarDiv = document.createElement("div");
+            lifeBarDiv.classList.add("life-bar");
+            const lifeDiv = document.createElement("div");
+            lifeDiv.classList.add("life");
+            lifeDiv.style.width = `${(allCharacters[i].health / 100) * 100}%`;
+            lifeBarDiv.appendChild(lifeDiv);
+            characterDiv.appendChild(lifeBarDiv);
+            characterDisplay.appendChild(characterDiv);
+          }
+        }
+
+        // 更新界面
+        updateUI() {
+          const characterDisplay = document.getElementById("character-display");
+          const allCharacters = [...this.teamA, ...this.teamB];
+          const characterDivs = characterDisplay.children;
+          for (let i = 0; i < allCharacters.length; i++) {
+            const lifeDiv = characterDivs[i].querySelector(".life");
+            lifeDiv.style.width = `${(allCharacters[i].health / 100) * 100}%`;
+          }
+        }
+
+        // 检查是否满足胜利条件
+        checkWinCondition() {
+          const teamAAlive = this.teamA.some((character) => character.isAlive);
+          const teamBAlive = this.teamB.some((character) => character.isAlive);
+          if (!teamAAlive) {
+            return "Team B 胜利";
+          } else if (!teamBAlive) {
+            return "Team A 胜利";
+          }
+          return null;
+        }
+
+        // 速度决定行动顺序
+        getActionOrder() {
+          const allCharacters = [...this.teamA, ...this.teamB].filter(
+            (character) => character.isAlive
+          );
+          return allCharacters.sort((a, b) => b.speed - a.speed);
+        }
+
+        // 一个回合的战斗流程
+        roundBattle() {
+          this.round++;
+          document.getElementById("round-number").textContent = this.round;
+          const actionOrder = this.getActionOrder();
+          for (let i = 0; i < actionOrder.length; i++) {
+            const currentCharacter = actionOrder[i];
+            document.getElementById("action-character").textContent =
+              currentCharacter.name;
+            let log = "";
+            if (this.teamA.includes(currentCharacter)) {
+              const aliveEnemies = this.teamB.filter(
+                (character) => character.isAlive
+              );
+              if (aliveEnemies.length > 0) {
+                const target =
+                  aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+                const skillIndex = Math.floor(
+                  Math.random() * skillTypes.length
+                );
+                switch (skillTypes[skillIndex]) {
+                  case "物理攻击":
+                    log = currentCharacter.physicalAttack(target);
+                    break;
+                  case "魔法攻击":
+                    log = currentCharacter.magicAttack(target);
+                    break;
+                  case "治疗":
+                    log = currentCharacter.heal();
+                    break;
+                }
+              }
+            } else {
+              // AI 行为：随机攻击
+              const aliveEnemies = this.teamA.filter(
+                (character) => character.isAlive
+              );
+              if (aliveEnemies.length > 0) {
+                const target =
+                  aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+                const skillIndex = Math.floor(
+                  Math.random() * skillTypes.length
+                );
+                switch (skillTypes[skillIndex]) {
+                  case "物理攻击":
+                    log = currentCharacter.physicalAttack(target);
+                    break;
+                  case "魔法攻击":
+                    log = currentCharacter.magicAttack(target);
+                    break;
+                  case "治疗":
+                    log = currentCharacter.heal();
+                    break;
+                }
+              }
+            }
+            document.getElementById("battle-log").textContent = log;
+            this.updateUI();
+            const winResult = this.checkWinCondition();
+            if (winResult) {
+              alert(winResult);
+              return;
+            }
+          }
+        }
+
+        // 自动战斗
+        autoBattle() {
+          this.isAutoBattle = true;
+          document.getElementById("auto-battle").disabled = true;
+          document.getElementById("pause").disabled = false;
+          const battleInterval = setInterval(
+            () => {
+              if (!this.isPaused) {
+                this.roundBattle();
+                const winResult = this.checkWinCondition();
+                if (winResult) {
+                  clearInterval(battleInterval);
+                }
+              }
+            },
+            this.animationSkipped ? 0 : 1000
+          );
+        }
+      }
+
+      // 创建角色
+      const characterA1 = new Character("A1", {
+        health: 100,
+        attack: 20,
+        defense: 10,
+        speed: 15,
+      });
+      const characterA2 = new Character("A2", {
+        health: 100,
+        attack: 25,
+        defense: 8,
+        speed: 20,
+      });
+      const characterB1 = new Character("B1", {
+        health: 100,
+        attack: 18,
+        defense: 12,
+        speed: 12,
+      });
+      const characterB2 = new Character("B2", {
+        health: 100,
+        attack: 22,
+        defense: 9,
+        speed: 18,
+      });
+
+      const teamA = [characterA1, characterA2];
+      const teamB = [characterB1, characterB2];
+
+      const battleSystem = new BattleSystem(teamA, teamB);
+      battleSystem.initUI();
+
+      // 自动战斗按钮事件
+      document.getElementById("auto-battle").addEventListener("click", () => {
+        battleSystem.autoBattle();
+      });
+
+      // 暂停按钮事件
+      document.getElementById("pause").addEventListener("click", () => {
+        battleSystem.isPaused = !battleSystem.isPaused;
+        document.getElementById("pause").textContent = battleSystem.isPaused
+          ? "继续"
+          : "暂停";
+      });
+
+      // 跳过动画按钮事件
+      document
+        .getElementById("skip-animation")
+        .addEventListener("click", () => {
+          // 禁用动画效果
+          document
+            .querySelectorAll(".life-bar")
+            .forEach((el) => (el.style.transition = "none"));
+          // 触发自动战斗逻辑
+          autoBattle();
+        });
+    </script>
+    <button id="export-log">导出战斗日志</button>
+    <script>
+      document.getElementById("export-log").addEventListener("click", () => {
+        const logData = JSON.stringify(battleLog, null, 2);
+        const blob = new Blob([logData], { type: "text/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `battle_log_${Date.now()}.json`;
+        a.click();
+      });
+    </script>
+  </body>
+</html>

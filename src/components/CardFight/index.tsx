@@ -1,5 +1,7 @@
 import styles from "./index.module.scss";
 import Info from "./components/Info";
+import "animate.css";
+
 const sizeMap: any = {
   big: {
     width: 150,
@@ -18,20 +20,42 @@ const sizeMap: any = {
   },
 };
 
-const Main = ({ size = "big", name, level, type = 1 }: any) => {
+const Main = ({
+  size = "big",
+  name,
+  level,
+  type = 1,
+  data = {
+    name: "A1",
+    health: 39,
+    attack: 20,
+    defense: 10,
+    speed: 15,
+    isAlive: true,
+    isAttack: false,
+    isAttacked: false,
+  },
+}: any) => {
   const width = sizeMap[size].width;
   const height = sizeMap[size].height;
   const fontSize = sizeMap[size].fontSize;
+
   return (
-    <div className={styles.wrap}>
+    <div
+      className={`${styles.wrap} animate__animated ${
+        data.isAttack ? "animate__pulse" : ""
+      } 
+      ${data.isAttacked ? "animate__wobble" : ""}
+      `}
+    >
       <div className={styles.card}>
         {type === 1 && <img src="/img/card2.png" alt="" />}
         {type === 0 && <img src="/img/card.png" alt="" />}
         <p>lv: {level}</p>
       </div>
-      <h5>{name}</h5>
+      <h5>{data.name}</h5>
       <div className={styles.blood}>
-        <div></div>
+        <div style={{ width: `${data.health}%` }}></div>
       </div>
       <div className={styles.speed}>
         <div></div>

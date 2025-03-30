@@ -23,13 +23,7 @@ const Main = ({ size = "big", name, level }: any) => {
   const height = sizeMap[size].height;
   const fontSize = sizeMap[size].fontSize;
   return (
-    <div
-      className={styles.wrap}
-      style={{
-        width,
-        height,
-      }}
-    >
+    <div className={`${styles.wrap} ${sizeMap[size]}`}>
       <div>
         <Info>
           <img src="/img/card.png" alt="" />

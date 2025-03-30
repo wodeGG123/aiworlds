@@ -45,8 +45,7 @@ const Main = ({
       className={`${styles.wrap} animate__animated ${
         data.isAttack ? "animate__pulse" : ""
       } 
-      ${data.isAttacked ? "animate__wobble" : ""}
-      `}
+      ${data.isAttacked ? "animate__wobble" : ""}`}
     >
       <div className={styles.card}>
         {type === 1 && <img src="/img/card2.png" alt="" />}

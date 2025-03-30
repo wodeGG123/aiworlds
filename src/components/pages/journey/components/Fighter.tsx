@@ -138,11 +138,11 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
         const teamBAlive = this.teamB.some((character) => character.isAlive);
         if (!teamAAlive) {
           res = "战斗失败";
-          setStatus(3);
+          setStatus(4);
           return "Team B 胜利";
         } else if (!teamBAlive) {
           res = "战斗胜利";
-          setStatus(4);
+          setStatus(3);
           return "Team A 胜利";
         }
         return null;

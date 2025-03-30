@@ -138,11 +138,11 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
         const teamBAlive = this.teamB.some((character) => character.isAlive);
         if (!teamAAlive) {
           res = "战斗失败";
-          setStatus(2);
+          setStatus(3);
           return "Team B 胜利";
         } else if (!teamBAlive) {
           res = "战斗胜利";
-          setStatus(3);
+          setStatus(4);
           return "Team A 胜利";
         }
         return null;
@@ -212,9 +212,8 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
           this.updateUI();
           const winResult = this.checkWinCondition();
           if (winResult) {
-            alert(winResult);
+            // alert(winResult);
             console.log(logs.join("\n"));
-
             return;
           }
           await new Promise((resolve, reject) => {

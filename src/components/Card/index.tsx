@@ -2,19 +2,19 @@ import styles from "./index.module.scss";
 import Info from "./components/Info";
 const sizeMap: any = {
   big: {
-    width: 150,
-    height: 200,
-    fontSize: 24,
+    width: "150px",
+    height: "200px",
+    fontSize: "24px",
   },
   mid: {
-    width: 100,
-    height: 136,
-    fontSize: 16,
+    width: "100px",
+    height: "136px",
+    fontSize: "16px",
   },
   small: {
-    width: 75,
-    height: 100,
-    fontSize: 12,
+    width: "75px",
+    height: "100px",
+    fontSize: "12px",
   },
 };
 

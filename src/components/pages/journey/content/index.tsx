@@ -237,6 +237,27 @@ const Main = () => {
             }}
           />
         )}
+        <Fighter
+          elm={[
+            {
+              name: "曹植",
+              health: 100,
+              attack: 20,
+              defense: 10,
+              speed: 15,
+            },
+            {
+              name: "曹丕",
+              health: 100,
+              attack: 20,
+              defense: 10,
+              speed: 15,
+            },
+          ]}
+          onClick={(res: any) => {
+            handleClick(res);
+          }}
+        />
       </div>
 
       <div className={styles.backWrap}>

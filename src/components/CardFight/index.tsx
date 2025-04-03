@@ -43,7 +43,7 @@ const Main = ({
   return (
     <div
       className={`${styles.wrap} animate__animated ${
-        data.isAttack ? "animate__pulse" : ""
+        data.isAttack ? "animate__rotateIn" : ""
       } 
       ${data.isAttacked ? "animate__wobble" : ""}`}
     >

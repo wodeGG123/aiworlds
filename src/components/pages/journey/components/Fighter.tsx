@@ -51,7 +51,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
       }
 
       // 物理攻击技能
-      physicalAttack(target) {
+      physicalAttack(target, updateUI) {
         if (Math.random() < skillTrigger.probability) {
           let damage = this.attack - target.defense;
           if (damage < 0) damage = 0;
@@ -60,7 +60,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
             target.health = 0;
             target.isAlive = false;
           }
-          this.uiChange(target);
+          this.uiChange(target, updateUI);
           return `[${this.name}]  使用物理攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
         }
 
@@ -68,7 +68,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
       }
 
       // 魔法攻击技能
-      magicAttack(target) {
+      magicAttack(target, updateUI) {
         if (Math.random() < skillTrigger.probability) {
           let damage = this.attack - target.defense;
           if (damage < 0) damage = 0;
@@ -77,35 +77,43 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
             target.health = 0;
             target.isAlive = false;
           }
-          this.uiChange(target);
+          this.uiChange(target, updateUI);
           return `[${this.name}]  使用魔法攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
         }
         return `[${this.name}]  魔法攻击未触发`;
       }
 
       // 治疗技能
-      heal() {
+      heal(updateUI) {
         if (Math.random() < skillTrigger.probability) {
           const healAmount = Math.floor(Math.random() * 10) + 1;
           this.health += healAmount;
+          this.uiChange(null, updateUI);
           return `[${this.name}]  使用治疗技能恢复了 ${healAmount} 点生命值`;
         }
-        this.uiChange();
         return `[${this.name}]  治疗技能未触发`;
       }
-      uiChange(target) {
-        this.isAttack = true;
+      async uiChange(target, updateUI) {
         if (target) {
-          target.isAttacked = true;
+          this.isAttack = true;
+          updateUI();
+          setTimeout(() => {
+            target.isAttacked = true;
+            updateUI();
+            setTimeout(() => {
+              this.isAttack = false;
+              if (target) {
+                target.isAttacked = false;
+              }
+            }, 0);
+          }, 1000);
+        } else {
+          this.isAttack = true;
+          updateUI();
+          setTimeout(() => {
+            this.isAttack = false;
+          }, 0);
         }
-
-        setTimeout(() => {
-          this.isAttack = false;
-
-          if (target) {
-            target.isAttacked = false;
-          }
-        }, 100);
       }
     }
     // 战斗系统类
@@ -175,13 +183,19 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
               const skillIndex = Math.floor(Math.random() * skillTypes.length);
               switch (skillTypes[skillIndex]) {
                 case "物理攻击":
-                  log = currentCharacter.physicalAttack(target);
+                  log = currentCharacter.physicalAttack(
+                    target,
+                    this.updateUI.bind(this)
+                  );
                   break;
                 case "魔法攻击":
-                  log = currentCharacter.magicAttack(target);
+                  log = currentCharacter.magicAttack(
+                    target,
+                    this.updateUI.bind(this)
+                  );
                   break;
                 case "治疗":
-                  log = currentCharacter.heal();
+                  log = currentCharacter.heal(this.updateUI.bind(this));
                   break;
               }
             }
@@ -196,20 +210,26 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
               const skillIndex = Math.floor(Math.random() * skillTypes.length);
               switch (skillTypes[skillIndex]) {
                 case "物理攻击":
-                  log = currentCharacter.physicalAttack(target);
+                  log = currentCharacter.physicalAttack(
+                    target,
+                    this.updateUI.bind(this)
+                  );
                   break;
                 case "魔法攻击":
-                  log = currentCharacter.magicAttack(target);
+                  log = currentCharacter.magicAttack(
+                    target,
+                    this.updateUI.bind(this)
+                  );
                   break;
                 case "治疗":
-                  log = currentCharacter.heal();
+                  log = currentCharacter.heal(this.updateUI.bind(this));
                   break;
               }
             }
           }
           setLog(log);
           logs.push(log);
-          this.updateUI();
+          // this.updateUI();
           const winResult = this.checkWinCondition();
           if (winResult) {
             // alert(winResult);
@@ -219,7 +239,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
           await new Promise((resolve, reject) => {
             setTimeout(() => {
               resolve(1);
-            }, 1000);
+            }, 2000);
           });
         }
         this.rounding = false;

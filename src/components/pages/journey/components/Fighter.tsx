@@ -4,7 +4,11 @@ import Coin from "@/components/Coin";
 import Card from "@/components/Card";
 import LevelLine from "@/components/LevelLine";
 import CardFight from "@/components/CardFight";
+import _ from "lodash";
 let res = "战斗胜利";
+const fightSpeed = {
+  value: 2000,
+};
 const logs = [];
 const ItemCompontent = () => {
   return (
@@ -46,22 +50,14 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
         this.defense = attributes.defense;
         this.speed = attributes.speed;
         this.isAlive = true;
-        this.isAttack = false;
-        this.isAttacked = false;
+        this.animationType = "";
       }
 
       // 物理攻击技能
       physicalAttack(target, updateUI) {
         if (Math.random() < skillTrigger.probability) {
-          let damage = this.attack - target.defense;
-          if (damage < 0) damage = 0;
-          target.health -= damage;
-          if (target.health <= 0) {
-            target.health = 0;
-            target.isAlive = false;
-          }
           this.uiChange(target, updateUI);
-          return `[${this.name}]  使用物理攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
+          return `[${this.name}]  使用物理攻击[${target.name}]`;
         }
 
         return `[${this.name}]  物理攻击未触发`;
@@ -70,15 +66,8 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
       // 魔法攻击技能
       magicAttack(target, updateUI) {
         if (Math.random() < skillTrigger.probability) {
-          let damage = this.attack - target.defense;
-          if (damage < 0) damage = 0;
-          target.health -= damage;
-          if (target.health <= 0) {
-            target.health = 0;
-            target.isAlive = false;
-          }
           this.uiChange(target, updateUI);
-          return `[${this.name}]  使用魔法攻击对 [${target.name}]  造成了 ${damage} 点伤害`;
+          return `[${this.name}]  使用魔法攻击 [${target.name}]`;
         }
         return `[${this.name}]  魔法攻击未触发`;
       }
@@ -86,32 +75,39 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
       // 治疗技能
       heal(updateUI) {
         if (Math.random() < skillTrigger.probability) {
-          const healAmount = Math.floor(Math.random() * 10) + 1;
-          this.health += healAmount;
           this.uiChange(null, updateUI);
-          return `[${this.name}]  使用治疗技能恢复了 ${healAmount} 点生命值`;
+          return `[${this.name}]  使用治疗技能恢复生命值`;
         }
         return `[${this.name}]  治疗技能未触发`;
       }
       async uiChange(target, updateUI) {
         if (target) {
-          this.isAttack = true;
+          this.animationType = "attack";
           updateUI();
           setTimeout(() => {
-            target.isAttacked = true;
+            let damage = this.attack - target.defense;
+            target.health -= damage;
+            if (target.health <= 0) {
+              target.health = 0;
+              target.isAlive = false;
+            }
+            target.animationType = `attacked=>${damage}`;
             updateUI();
             setTimeout(() => {
-              this.isAttack = false;
+              this.animationType = "";
               if (target) {
-                target.isAttacked = false;
+                target.animationType = "";
               }
             }, 0);
           }, 1000);
         } else {
-          this.isAttack = true;
+          const healAmount = Math.floor(Math.random() * 10) + 1;
+          this.health += healAmount;
+          this.animationType = `heal=>${healAmount}`;
+          console.log(`heal=>${healAmount}`);
           updateUI();
           setTimeout(() => {
-            this.isAttack = false;
+            this.animationType = "";
           }, 0);
         }
       }
@@ -136,8 +132,8 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
 
       // 更新界面
       updateUI() {
-        set_teamA([...this.teamA]);
-        set_teamB([...this.teamB]);
+        set_teamA(_.cloneDeep(this.teamA));
+        set_teamB(_.cloneDeep(this.teamB));
       }
 
       // 检查是否满足胜利条件
@@ -239,7 +235,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
           await new Promise((resolve, reject) => {
             setTimeout(() => {
               resolve(1);
-            }, 2000);
+            }, fightSpeed.value);
           });
         }
         this.rounding = false;
@@ -328,6 +324,15 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
           <p>
             战斗日志: <span id="battle-log">{log}</span>
           </p>
+          <div>
+            <button
+              onClick={() => {
+                fightSpeed.value = 100;
+              }}
+            >
+              战斗加速
+            </button>
+          </div>
         </div>
       </div>
       <div className={styles.enemy}>

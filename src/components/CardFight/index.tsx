@@ -1,6 +1,7 @@
 import styles from "./index.module.scss";
 import Info from "./components/Info";
 import "animate.css";
+import { useMemo } from "react";
 
 const sizeMap: any = {
   big: {
@@ -32,32 +33,64 @@ const Main = ({
     defense: 10,
     speed: 15,
     isAlive: true,
-    isAttack: false,
-    isAttacked: false,
+    animationType: "", //attack、attacked=>10、heal=>10
   },
 }: any) => {
   const width = sizeMap[size].width;
   const height = sizeMap[size].height;
   const fontSize = sizeMap[size].fontSize;
+  console.log(data);
+
+  const animationClass = useMemo(() => {
+    if (!data.isAlive) return styles.dead;
+    let rs = "";
+    if (!data.animationType) return rs;
+    const animationType = data.animationType.split("=>");
+    if (animationType[0] === "attack") {
+      rs = "animate__flip";
+    }
+    if (animationType[0] === "heal") {
+      rs = "animate__pulse";
+    }
+    if (animationType[0] === "attacked") {
+      rs = "animate__flash";
+    }
+    return rs;
+  }, [data]);
+  const bloodDi = useMemo(() => {
+    let rs = {
+      class: "",
+      value: "",
+    };
+    if (!data.animationType) return rs;
+    const animationType = data.animationType.split("=>");
+    if (animationType[0] === "heal") {
+      rs.class = `animate__fadeOutUp ${styles.bloodAdd}`;
+      rs.value = `+${animationType[1]}`;
+    }
+    if (animationType[0] === "attacked") {
+      rs.class = `animate__fadeOutUp ${styles.bloodLoss}`;
+      rs.value = `-${animationType[1]}`;
+    }
+    return rs;
+  }, [data]);
 
   return (
-    <div
-      className={`${styles.wrap} animate__animated ${
-        data.isAttack ? "animate__rotateIn" : ""
-      } 
-      ${data.isAttacked ? "animate__wobble" : ""}`}
-    >
+    <div className={`${styles.wrap} animate__animated ${animationClass}`}>
       <div className={styles.card}>
         {type === 1 && <img src="/img/card2.png" alt="" />}
         {type === 0 && <img src="/img/card.png" alt="" />}
         <p>lv: {level}</p>
       </div>
-      <h5>{data.name}</h5>
+      <h5>{data.name.split("【")[0]}</h5>
       <div className={styles.blood}>
         <div style={{ width: `${data.health}%` }}></div>
       </div>
       <div className={styles.speed}>
         <div></div>
+      </div>
+      <div className={`${styles.bloodDi} animate__animated ${bloodDi.class}`}>
+        <p>{bloodDi.value}</p>
       </div>
     </div>
   );

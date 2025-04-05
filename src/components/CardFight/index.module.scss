@@ -48,4 +48,32 @@
       border-radius: 8px;
     }
   }
+  .bloodDi {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    p {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+  .bloodAdd {
+    p {
+      color: green;
+    }
+  }
+  .bloodLoss {
+    p {
+      color: red;
+    }
+  }
+}
+.dead {
+  filter: grayscale(100%);
+  -webkit-filter: grayscale(100%); /* 兼容webkit浏览器 */
+  -moz-filter: grayscale(100%); /* 兼容Firefox */
+  -ms-filter: grayscale(100%); /* 兼容IE/Edge */
+  filter: gray; /* 兼容旧版IE */
 }

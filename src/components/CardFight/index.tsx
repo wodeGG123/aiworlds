@@ -78,8 +78,8 @@ const Main = ({
   return (
     <div className={`${styles.wrap} animate__animated ${animationClass}`}>
       <div className={styles.card}>
-        {type === 1 && <img src="/img/card2.png" alt="" />}
-        {type === 0 && <img src="/img/card.png" alt="" />}
+        {type === 1 && <img src={data.src || "/npc/2.jpg"} alt="" />}
+        {type === 0 && <img src={data.src || "/npc/1.jpg"} alt="" />}
         <p>lv: {level}</p>
       </div>
       <h5>{data.name.split("【")[0]}</h5>

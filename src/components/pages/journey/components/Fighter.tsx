@@ -7,7 +7,7 @@ import CardFight from "@/components/CardFight";
 import _ from "lodash";
 let res = "战斗胜利";
 const fightSpeed = {
-  value: 2000,
+  value: 1000,
 };
 const logs = [];
 const ItemCompontent = () => {
@@ -21,7 +21,7 @@ const ItemCompontent = () => {
     </div>
   );
 };
-
+let inited = false;
 const Main = ({ onClick = () => {}, elm = [] }) => {
   const [status, setStatus] = useState(0);
   const [log, setLog] = useState("");
@@ -30,6 +30,8 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
   const [_teamA, set_teamA] = useState([]);
   const [_teamB, set_teamB] = useState([]);
   useEffect(() => {
+    if (inited) return;
+    inited = true;
     // 基础设定
     const battleMode = "多角色小队战";
     const characterAttributes = {
@@ -49,14 +51,15 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
         this.attack = attributes.attack;
         this.defense = attributes.defense;
         this.speed = attributes.speed;
+        this.src = attributes.src;
         this.isAlive = true;
         this.animationType = "";
       }
 
       // 物理攻击技能
-      physicalAttack(target, updateUI) {
+      async physicalAttack(target, updateUI) {
         if (Math.random() < skillTrigger.probability) {
-          this.uiChange(target, updateUI);
+          await this.uiChange(target, updateUI);
           return `[${this.name}]  使用物理攻击[${target.name}]`;
         }
 
@@ -64,18 +67,18 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
       }
 
       // 魔法攻击技能
-      magicAttack(target, updateUI) {
+      async magicAttack(target, updateUI) {
         if (Math.random() < skillTrigger.probability) {
-          this.uiChange(target, updateUI);
+          await this.uiChange(target, updateUI);
           return `[${this.name}]  使用魔法攻击 [${target.name}]`;
         }
         return `[${this.name}]  魔法攻击未触发`;
       }
 
       // 治疗技能
-      heal(updateUI) {
+      async heal(updateUI) {
         if (Math.random() < skillTrigger.probability) {
-          this.uiChange(null, updateUI);
+          await this.uiChange(null, updateUI);
           return `[${this.name}]  使用治疗技能恢复生命值`;
         }
         return `[${this.name}]  治疗技能未触发`;
@@ -84,31 +87,40 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
         if (target) {
           this.animationType = "attack";
           updateUI();
-          setTimeout(() => {
-            let damage = this.attack - target.defense;
-            target.health -= damage;
-            if (target.health <= 0) {
-              target.health = 0;
-              target.isAlive = false;
-            }
-            target.animationType = `attacked=>${damage}`;
-            updateUI();
+          await new Promise((resolve, reject) => {
             setTimeout(() => {
-              this.animationType = "";
-              if (target) {
-                target.animationType = "";
-              }
-            }, 0);
-          }, 1000);
+              resolve(1);
+            }, 1000);
+          });
+          let damage = this.attack - target.defense;
+          target.health -= damage;
+          if (target.health <= 0) {
+            target.health = 0;
+            target.isAlive = false;
+          }
+          target.animationType = `attacked=>${damage}`;
+          updateUI();
+          await new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(1);
+            }, 10);
+          });
+          this.animationType = "";
+          if (target) {
+            target.animationType = "";
+          }
         } else {
           const healAmount = Math.floor(Math.random() * 10) + 1;
           this.health += healAmount;
           this.animationType = `heal=>${healAmount}`;
           console.log(`heal=>${healAmount}`);
           updateUI();
-          setTimeout(() => {
-            this.animationType = "";
-          }, 0);
+          await new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(1);
+            }, 1000);
+          });
+          this.animationType = "";
         }
       }
     }
@@ -179,19 +191,19 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
               const skillIndex = Math.floor(Math.random() * skillTypes.length);
               switch (skillTypes[skillIndex]) {
                 case "物理攻击":
-                  log = currentCharacter.physicalAttack(
+                  log = await currentCharacter.physicalAttack(
                     target,
                     this.updateUI.bind(this)
                   );
                   break;
                 case "魔法攻击":
-                  log = currentCharacter.magicAttack(
+                  log = await currentCharacter.magicAttack(
                     target,
                     this.updateUI.bind(this)
                   );
                   break;
                 case "治疗":
-                  log = currentCharacter.heal(this.updateUI.bind(this));
+                  log = await currentCharacter.heal(this.updateUI.bind(this));
                   break;
               }
             }
@@ -206,19 +218,19 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
               const skillIndex = Math.floor(Math.random() * skillTypes.length);
               switch (skillTypes[skillIndex]) {
                 case "物理攻击":
-                  log = currentCharacter.physicalAttack(
+                  log = await currentCharacter.physicalAttack(
                     target,
                     this.updateUI.bind(this)
                   );
                   break;
                 case "魔法攻击":
-                  log = currentCharacter.magicAttack(
+                  log = await currentCharacter.magicAttack(
                     target,
                     this.updateUI.bind(this)
                   );
                   break;
                 case "治疗":
-                  log = currentCharacter.heal(this.updateUI.bind(this));
+                  log = await currentCharacter.heal(this.updateUI.bind(this));
                   break;
               }
             }
@@ -292,20 +304,24 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
         attack: Number(item.attack),
         defense: Number(item.defense),
         speed: Number(item.speed),
+        src: `/npc/${index + 1}.jpg`,
       });
     });
-    const teamB = elm.map((item: any) => {
+    const teamB = elm.map((item: any, index: number) => {
       return new Character(`${item.name}【敌方】`, {
         health: 100,
         attack: Math.max(Number(item.attack), Number(item.defense)) + 10,
         defense: Math.min(Number(item.attack), Number(item.defense)) - 10,
         speed: Number(item.speed),
+        src: `/npc/${index + 5}.jpg`,
       });
     });
     const battleSystem = new BattleSystem(teamA, teamB);
     battleSystem.initUI();
     battleSystem.autoBattle();
+    console.count("fight init");
   }, []);
+
   return (
     <div className={styles.wrap}>
       <div className={styles.buttons}>
@@ -326,8 +342,11 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
           </p>
           <div>
             <button
-              onClick={() => {
+              onClick={(e) => {
                 fightSpeed.value = 100;
+
+                e.preventDefault();
+                e.stopPropagation();
               }}
             >
               战斗加速
@@ -385,6 +404,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
             src="/icons/succsess.png"
             alt=""
             onClick={(e) => {
+              inited = false;
               onClick(res);
               e.preventDefault();
               e.stopPropagation();

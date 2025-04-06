@@ -21,7 +21,7 @@
     }
   }
   .content {
-    padding: 12px;
+    // padding: 12px;
     background-color: rgba(0, 0, 0, 0.4);
     font-size: 16px;
     z-index: 1;
@@ -47,6 +47,7 @@
   .selection {
     width: 100%;
     padding: 12px;
+    margin-top: 60px;
     background-color: rgba(255, 255, 255, 1);
     :global(button) {
       width: 100%;

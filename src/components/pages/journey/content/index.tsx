@@ -122,7 +122,6 @@ const Main = () => {
       setCurrent(false);
       setTimeout(() => {
         if (Number(step) >= content.length) {
-          debugger;
           setStep("-1");
           setContent(false);
           setCurrent(false);
@@ -229,7 +228,7 @@ const Main = () => {
             // }}
           />
         )}
-        {current && current.type === "fight" && (
+        {current && current.type === "fight" && current.content.length > 0 && (
           <Fighter
             elm={current.content}
             onClick={(res: any) => {
@@ -237,7 +236,7 @@ const Main = () => {
             }}
           />
         )}
-        <Fighter
+        {/* <Fighter
           elm={[
             {
               name: "曹植",
@@ -245,6 +244,7 @@ const Main = () => {
               attack: 20,
               defense: 10,
               speed: 15,
+              src: "/npc/1.jpg",
             },
             {
               name: "曹丕",
@@ -252,12 +252,29 @@ const Main = () => {
               attack: 20,
               defense: 10,
               speed: 15,
+              src: "/npc/2.jpg",
+            },
+            {
+              name: "夏侯惇",
+              health: 100,
+              attack: 20,
+              defense: 10,
+              speed: 15,
+              src: "/npc/3.jpg",
+            },
+            {
+              name: "司马懿",
+              health: 100,
+              attack: 20,
+              defense: 10,
+              speed: 15,
+              src: "/npc/4.jpg",
             },
           ]}
           onClick={(res: any) => {
             handleClick(res);
           }}
-        />
+        /> */}
       </div>
 
       <div className={styles.backWrap}>

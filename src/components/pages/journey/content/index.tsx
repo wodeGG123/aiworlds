@@ -307,26 +307,6 @@ const Main = () => {
           </Button>
         </div>
       )}
-      {/* {current && current.type === "fight" && (
-        <div className={styles.selection}>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              handleClick("战斗胜利");
-            }}
-          >
-            战斗胜利
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              handleClick("战斗失败");
-            }}
-          >
-            战斗失败
-          </Button>
-        </div>
-      )} */}
 
       <Modal
         open={open}

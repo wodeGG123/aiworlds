@@ -294,8 +294,8 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
       const teamA = elm.map((item: any, index: number) => {
         return new Character(`${A[index]}【我方】`, {
           health: 100,
-          attack: Number(item.attack),
-          defense: Number(item.defense),
+          attack: Math.max(Number(item.attack), Number(item.defense)) + 30,
+          defense: Math.min(Number(item.attack), Number(item.defense)) + 10,
           speed: Number(item.speed),
         });
       });

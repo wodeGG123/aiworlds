@@ -15,6 +15,7 @@ import Typewriter from "../components/TypeWriter";
 import Fighter from "../components/Fighter";
 import _ from "lodash";
 import npcList from "@/lib/npclist";
+import ev from "@/lib/ev";
 function replaceAllEscapes(str) {
   console.log("pre str", str);
 
@@ -43,22 +44,28 @@ const transfer = (list) => {
     content: [],
   };
   _list.forEach((item) => {
+    // if (item.includes("[场景]")) {
+    //   rs.push({
+    //     type: "scene",
+    //     content: item.replaceAll("[场景]", ""),
+    //   });
+    // }
     if (item.includes("[旁白]")) {
       rs.push({
         type: "narration",
-        content: item.replace("[旁白]", ""),
+        content: item.replaceAll("[旁白]", ""),
       });
     }
     if (item.includes("[对话]")) {
-      const dialog = item.replace("[对话]", "").split("=>");
+      const dialog = item.replaceAll("[对话]", "").split("=>");
       rs.push({
         type: "dialogue",
-        name: dialog[0].replace("(", "").replace(")", ""),
+        name: dialog[0].replaceAll("(", "").replaceAll(")", ""),
         content: dialog[1],
       });
     }
     if (item.includes("[选项]")) {
-      option.content.push(item.replace("[选项]", ""));
+      option.content.push(item.replaceAll("[选项]", ""));
     }
     if (item.includes("[战斗]")) {
       const _fight = item.split("[战斗]");
@@ -113,6 +120,7 @@ const Main = () => {
   const [open, setOpen] = React.useState(false);
   const [content, setContent] = useState(false);
   const [current, setCurrent] = useState(false);
+  const [scene, setScene] = useState("/img/赤壁之战/场景/清江峡口/0.png");
   const [step, setStep] = useState("-1");
 
   useEffect(() => {
@@ -120,7 +128,7 @@ const Main = () => {
     // }
   }, [current]);
   const currentNPCsrc = useMemo(() => {
-    let rs = "/img/npc.jpg";
+    let rs = "/npc/1.jpg";
     if (current.type === "dialogue") {
       const obj: any = npcList.find((item) =>
         current.name.includes(item.character)
@@ -152,6 +160,15 @@ const Main = () => {
       console.log("content", content);
     }
   }, [step, content]);
+  const getScene = (t) => {
+    for (let index = 0; index < ev.length; index++) {
+      const element = ev[index];
+      if (t.includes(element)) {
+        setScene(`/img/赤壁之战/场景/${element}/0.png`);
+        return;
+      }
+    }
+  };
   const startAI = (item: any) => {
     setOpen(true);
     setStep("-1");
@@ -166,7 +183,7 @@ const Main = () => {
       });
     }
     const params = {
-      model: "deepseek-ai/DeepSeek-V3",
+      model: "deepseek-v3-250324",
       messages: [{ role: "user", content: JSON.stringify(msgs) }],
       stream: true,
       max_tokens: 512,
@@ -177,17 +194,19 @@ const Main = () => {
       response_format: { type: "text" },
       n: 1,
     };
-    const sse = new SSE("https://api.siliconflow.cn/v1/chat/completions", {
-      method: "POST",
-      start: false,
-      debug: true,
-      headers: {
-        Authorization:
-          "Bearer sk-sdgjqigfyugwuouguoxpmllpikenslumxqlqsoqcpeoojpbi",
-        "Content-Type": "application/json",
-      },
-      payload: JSON.stringify(params),
-    });
+    const sse = new SSE(
+      "https://ark.cn-beijing.volces.com/api/v3/chat/completions",
+      {
+        method: "POST",
+        start: false,
+        debug: true,
+        headers: {
+          Authorization: "Bearer a5cccc9b-116e-40e1-9009-0c0f8fe56eb8",
+          "Content-Type": "application/json",
+        },
+        payload: JSON.stringify(params),
+      }
+    );
     let t = "";
     sse.addEventListener("message", (e) => {
       try {
@@ -202,6 +221,7 @@ const Main = () => {
           // t = t.replaceAll("\\", "");
           // t = t.replaceAll(" ", "");
           t = replaceAllEscapes(t);
+          getScene(t);
           t = transfer(t);
           setContent(t);
           setOpen(false);
@@ -222,7 +242,12 @@ const Main = () => {
   };
   const handleClose = () => setOpen(false);
   return (
-    <div className={styles.wrap}>
+    <div
+      className={styles.wrap}
+      style={{
+        backgroundImage: `url(${scene})`,
+      }}
+    >
       <div className={styles.npc}>
         <img src={currentNPCsrc} alt="" />
       </div>

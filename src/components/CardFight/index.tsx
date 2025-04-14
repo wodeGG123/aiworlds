@@ -1,7 +1,7 @@
 import styles from "./index.module.scss";
 import Info from "./components/Info";
 import "animate.css";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 const sizeMap: any = {
   big: {
@@ -40,6 +40,7 @@ const Main = ({
   const height = sizeMap[size].height;
   const fontSize = sizeMap[size].fontSize;
   console.log(data);
+  const [imgSrc, setImgSrc] = useState(data.src);
 
   const animationClass = useMemo(() => {
     if (!data.isAlive) return styles.dead;
@@ -78,7 +79,15 @@ const Main = ({
   return (
     <div className={`${styles.wrap} animate__animated ${animationClass}`}>
       <div className={styles.card}>
-        {type === 1 && <img src={data.src || "/npc/2.jpg"} alt="" />}
+        {type === 1 && (
+          <img
+            src={data.src}
+            alt=""
+            // onError={() => {
+            //   setImgSrc(`/img/赤壁之战/东吴弓箭手/0.png`);
+            // }}
+          />
+        )}
         {type === 0 && <img src={data.src || "/npc/1.jpg"} alt="" />}
         <p>lv: {level}</p>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./index.module.scss";
 import Coin from "@/components/Coin";
 import Card from "@/components/Card";
@@ -14,6 +14,7 @@ import { SSE } from "@/lib/sse.js";
 import Typewriter from "../components/TypeWriter";
 import Fighter from "../components/Fighter";
 import _ from "lodash";
+import npcList from "@/lib/npclist";
 function replaceAllEscapes(str) {
   console.log("pre str", str);
 
@@ -63,12 +64,13 @@ const transfer = (list) => {
       const _fight = item.split("[战斗]");
       if (_fight[0].includes("=>")) {
         const fighter = _fight[0].split("=>");
+        const obj: any = npcList.find((item) =>
+          fighter[0].includes(item.character)
+        );
         fight.content.push({
-          name: fighter[0],
-          attack: fighter[1],
-          defense: fighter[2],
-          health: fighter[3],
-          speed: fighter[4],
+          ...obj,
+          name: obj.character,
+          src: `/img/赤壁之战/人物/${obj.character}/0.png`,
         });
       }
       // rs.push({
@@ -77,12 +79,14 @@ const transfer = (list) => {
       // });
     }
   });
-  if (option.content.length !== 0) {
+
+  if (option.content.length !== 0 && fight.content.length === 0) {
     rs.push(option);
   }
   if (fight.content.length !== 0) {
     rs.push(fight);
   }
+
   return rs;
 };
 const ItemCompontent = () => {
@@ -115,7 +119,16 @@ const Main = () => {
     // if(current.type === 'narration'){
     // }
   }, [current]);
-
+  const currentNPCsrc = useMemo(() => {
+    let rs = "/img/npc.jpg";
+    if (current.type === "dialogue") {
+      const obj: any = npcList.find((item) =>
+        current.name.includes(item.character)
+      );
+      rs = `/img/赤壁之战/人物/${obj.character}/1.png`;
+    }
+    return rs;
+  }, [current]);
   useEffect(() => {
     console.log("step", step);
     if (step !== "-1" && content) {
@@ -211,7 +224,7 @@ const Main = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.npc}>
-        <img src="/img/npc.jpg" alt="" />
+        <img src={currentNPCsrc} alt="" />
       </div>
       <div
         className={styles.content}
@@ -236,45 +249,6 @@ const Main = () => {
             }}
           />
         )}
-        {/* <Fighter
-          elm={[
-            {
-              name: "曹植",
-              health: 100,
-              attack: 20,
-              defense: 10,
-              speed: 15,
-              src: "/npc/1.jpg",
-            },
-            {
-              name: "曹丕",
-              health: 100,
-              attack: 20,
-              defense: 10,
-              speed: 15,
-              src: "/npc/2.jpg",
-            },
-            {
-              name: "夏侯惇",
-              health: 100,
-              attack: 20,
-              defense: 10,
-              speed: 15,
-              src: "/npc/3.jpg",
-            },
-            {
-              name: "司马懿",
-              health: 100,
-              attack: 20,
-              defense: 10,
-              speed: 15,
-              src: "/npc/4.jpg",
-            },
-          ]}
-          onClick={(res: any) => {
-            handleClick(res);
-          }}
-        /> */}
       </div>
 
       <div className={styles.backWrap}>

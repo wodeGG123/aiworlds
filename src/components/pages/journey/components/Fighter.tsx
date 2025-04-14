@@ -5,10 +5,8 @@ import Card from "@/components/Card";
 import LevelLine from "@/components/LevelLine";
 import CardFight from "@/components/CardFight";
 import _ from "lodash";
+let tag = true;
 let res = "战斗胜利";
-const fightSpeed = {
-  value: 1000,
-};
 const logs = [];
 const ItemCompontent = () => {
   return (
@@ -21,7 +19,7 @@ const ItemCompontent = () => {
     </div>
   );
 };
-let inited = false;
+
 const Main = ({ onClick = () => {}, elm = [] }) => {
   const [status, setStatus] = useState(0);
   const [log, setLog] = useState("");
@@ -30,298 +28,292 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
   const [_teamA, set_teamA] = useState([]);
   const [_teamB, set_teamB] = useState([]);
   useEffect(() => {
-    if (inited) return;
-    inited = true;
-    // 基础设定
-    const battleMode = "多角色小队战";
-    const characterAttributes = {
-      health: 0,
-      attack: 0,
-      defense: 0,
-      speed: 0,
-    };
-    const skillTypes = ["物理攻击", "魔法攻击", "治疗"];
-    const skillTrigger = { type: "概率触发", probability: 1 };
-    const winCondition = "全灭敌方";
-    // 角色类
-    class Character {
-      constructor(name, attributes) {
-        this.name = name;
-        this.health = attributes.health;
-        this.attack = attributes.attack;
-        this.defense = attributes.defense;
-        this.speed = attributes.speed;
-        this.src = attributes.src;
-        this.isAlive = true;
-        this.animationType = "";
-      }
-
-      // 物理攻击技能
-      async physicalAttack(target, updateUI) {
-        if (Math.random() < skillTrigger.probability) {
-          await this.uiChange(target, updateUI);
-          return `[${this.name}]  使用物理攻击[${target.name}]`;
-        }
-
-        return `[${this.name}]  物理攻击未触发`;
-      }
-
-      // 魔法攻击技能
-      async magicAttack(target, updateUI) {
-        if (Math.random() < skillTrigger.probability) {
-          await this.uiChange(target, updateUI);
-          return `[${this.name}]  使用魔法攻击 [${target.name}]`;
-        }
-        return `[${this.name}]  魔法攻击未触发`;
-      }
-
-      // 治疗技能
-      async heal(updateUI) {
-        if (Math.random() < skillTrigger.probability) {
-          await this.uiChange(null, updateUI);
-          return `[${this.name}]  使用治疗技能恢复生命值`;
-        }
-        return `[${this.name}]  治疗技能未触发`;
-      }
-      async uiChange(target, updateUI) {
-        if (target) {
-          this.animationType = "attack";
-          updateUI();
-          await new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve(1);
-            }, 1000);
-          });
-          let damage = this.attack - target.defense;
-          target.health -= damage;
-          if (target.health <= 0) {
-            target.health = 0;
-            target.isAlive = false;
-          }
-          target.animationType = `attacked=>${damage}`;
-          updateUI();
-          await new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve(1);
-            }, 10);
-          });
+    if (tag) {
+      tag = false;
+      // 基础设定
+      const battleMode = "多角色小队战";
+      const characterAttributes = {
+        health: 0,
+        attack: 0,
+        defense: 0,
+        speed: 0,
+      };
+      const skillTypes = ["物理攻击", "魔法攻击", "治疗"];
+      const skillTrigger = { type: "概率触发", probability: 1 };
+      const winCondition = "全灭敌方";
+      // 角色类
+      class Character {
+        constructor(name, attributes) {
+          this.name = name;
+          this.health = attributes.health;
+          this.attack = attributes.attack;
+          this.defense = attributes.defense;
+          this.speed = attributes.speed;
+          this.isAlive = true;
           this.animationType = "";
+          this.src = attributes.src;
+        }
+
+        // 物理攻击技能
+        physicalAttack(target, updateUI) {
+          if (Math.random() < skillTrigger.probability) {
+            this.uiChange(target, updateUI);
+            return `[${this.name}]  使用物理攻击[${target.name}]`;
+          }
+
+          return `[${this.name}]  物理攻击未触发`;
+        }
+
+        // 魔法攻击技能
+        magicAttack(target, updateUI) {
+          if (Math.random() < skillTrigger.probability) {
+            this.uiChange(target, updateUI);
+            return `[${this.name}]  使用魔法攻击 [${target.name}]`;
+          }
+          return `[${this.name}]  魔法攻击未触发`;
+        }
+
+        // 治疗技能
+        heal(updateUI) {
+          if (Math.random() < skillTrigger.probability) {
+            this.uiChange(null, updateUI);
+            return `[${this.name}]  使用治疗技能恢复生命值`;
+          }
+          return `[${this.name}]  治疗技能未触发`;
+        }
+        async uiChange(target, updateUI) {
           if (target) {
-            target.animationType = "";
-          }
-        } else {
-          const healAmount = Math.floor(Math.random() * 10) + 1;
-          this.health += healAmount;
-          this.animationType = `heal=>${healAmount}`;
-          console.log(`heal=>${healAmount}`);
-          updateUI();
-          await new Promise((resolve, reject) => {
+            this.animationType = "attack";
+            updateUI();
             setTimeout(() => {
-              resolve(1);
+              let damage = this.attack - target.defense;
+              target.health -= damage;
+              if (target.health <= 0) {
+                target.health = 0;
+                target.isAlive = false;
+              }
+              target.animationType = `attacked=>${damage}`;
+              updateUI();
+              setTimeout(() => {
+                this.animationType = "";
+                if (target) {
+                  target.animationType = "";
+                }
+              }, 0);
             }, 1000);
-          });
-          this.animationType = "";
-        }
-      }
-    }
-    // 战斗系统类
-    class BattleSystem {
-      constructor(teamA, teamB) {
-        this.teamA = teamA;
-        this.teamB = teamB;
-        this.round = 0;
-        this.isAutoBattle = false;
-        this.isPaused = false;
-        this.animationSkipped = false;
-        this.rounding = false;
-      }
-
-      // 初始化界面
-      initUI() {
-        set_teamA([...this.teamA]);
-        set_teamB([...this.teamB]);
-      }
-
-      // 更新界面
-      updateUI() {
-        set_teamA(_.cloneDeep(this.teamA));
-        set_teamB(_.cloneDeep(this.teamB));
-      }
-
-      // 检查是否满足胜利条件
-      checkWinCondition() {
-        const teamAAlive = this.teamA.some((character) => character.isAlive);
-        const teamBAlive = this.teamB.some((character) => character.isAlive);
-        if (!teamAAlive) {
-          res = "战斗失败";
-          setStatus(4);
-          return "Team B 胜利";
-        } else if (!teamBAlive) {
-          res = "战斗胜利";
-          setStatus(3);
-          return "Team A 胜利";
-        }
-        return null;
-      }
-
-      // 速度决定行动顺序
-      getActionOrder() {
-        const allCharacters = [...this.teamA, ...this.teamB].filter(
-          (character) => character.isAlive
-        );
-        return allCharacters.sort((a, b) => b.speed - a.speed);
-      }
-
-      // 一个回合的战斗流程
-      async roundBattle() {
-        this.round++;
-        setRoundNumber(this.round);
-        const actionOrder = this.getActionOrder();
-        for (let i = 0; i < actionOrder.length; i++) {
-          const currentCharacter = actionOrder[i];
-          setActionCharacter(currentCharacter.name);
-          let log = "";
-          if (this.teamA.includes(currentCharacter)) {
-            const aliveEnemies = this.teamB.filter(
-              (character) => character.isAlive
-            );
-            if (aliveEnemies.length > 0) {
-              const target =
-                aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
-              const skillIndex = Math.floor(Math.random() * skillTypes.length);
-              switch (skillTypes[skillIndex]) {
-                case "物理攻击":
-                  log = await currentCharacter.physicalAttack(
-                    target,
-                    this.updateUI.bind(this)
-                  );
-                  break;
-                case "魔法攻击":
-                  log = await currentCharacter.magicAttack(
-                    target,
-                    this.updateUI.bind(this)
-                  );
-                  break;
-                case "治疗":
-                  log = await currentCharacter.heal(this.updateUI.bind(this));
-                  break;
-              }
-            }
           } else {
-            // AI 行为：随机攻击
-            const aliveEnemies = this.teamA.filter(
-              (character) => character.isAlive
-            );
-            if (aliveEnemies.length > 0) {
-              const target =
-                aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
-              const skillIndex = Math.floor(Math.random() * skillTypes.length);
-              switch (skillTypes[skillIndex]) {
-                case "物理攻击":
-                  log = await currentCharacter.physicalAttack(
-                    target,
-                    this.updateUI.bind(this)
-                  );
-                  break;
-                case "魔法攻击":
-                  log = await currentCharacter.magicAttack(
-                    target,
-                    this.updateUI.bind(this)
-                  );
-                  break;
-                case "治疗":
-                  log = await currentCharacter.heal(this.updateUI.bind(this));
-                  break;
+            const healAmount = Math.floor(Math.random() * 10) + 1;
+            this.health += healAmount;
+            this.animationType = `heal=>${healAmount}`;
+            console.log(`heal=>${healAmount}`);
+            updateUI();
+            setTimeout(() => {
+              this.animationType = "";
+            }, 0);
+          }
+        }
+      }
+      // 战斗系统类
+      class BattleSystem {
+        constructor(teamA, teamB) {
+          this.teamA = teamA;
+          this.teamB = teamB;
+          this.round = 0;
+          this.isAutoBattle = false;
+          this.isPaused = false;
+          this.animationSkipped = false;
+          this.rounding = false;
+        }
+
+        // 初始化界面
+        initUI() {
+          set_teamA([...this.teamA]);
+          set_teamB([...this.teamB]);
+        }
+
+        // 更新界面
+        updateUI() {
+          set_teamA(_.cloneDeep(this.teamA));
+          set_teamB(_.cloneDeep(this.teamB));
+        }
+
+        // 检查是否满足胜利条件
+        checkWinCondition() {
+          const teamAAlive = this.teamA.some((character) => character.isAlive);
+          const teamBAlive = this.teamB.some((character) => character.isAlive);
+          if (!teamAAlive) {
+            res = "战斗失败";
+            setStatus(4);
+            return "Team B 胜利";
+          } else if (!teamBAlive) {
+            res = "战斗胜利";
+            setStatus(3);
+            return "Team A 胜利";
+          }
+          return null;
+        }
+
+        // 速度决定行动顺序
+        getActionOrder() {
+          const allCharacters = [...this.teamA, ...this.teamB].filter(
+            (character) => character.isAlive
+          );
+          return allCharacters.sort((a, b) => b.speed - a.speed);
+        }
+
+        // 一个回合的战斗流程
+        async roundBattle() {
+          this.round++;
+          setRoundNumber(this.round);
+          const actionOrder = this.getActionOrder();
+          for (let i = 0; i < actionOrder.length; i++) {
+            const currentCharacter = actionOrder[i];
+            setActionCharacter(currentCharacter.name);
+            let log = "";
+            if (this.teamA.includes(currentCharacter)) {
+              const aliveEnemies = this.teamB.filter(
+                (character) => character.isAlive
+              );
+              if (aliveEnemies.length > 0) {
+                const target =
+                  aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+                const skillIndex = Math.floor(
+                  Math.random() * skillTypes.length
+                );
+                switch (skillTypes[skillIndex]) {
+                  case "物理攻击":
+                    log = currentCharacter.physicalAttack(
+                      target,
+                      this.updateUI.bind(this)
+                    );
+                    break;
+                  case "魔法攻击":
+                    log = currentCharacter.magicAttack(
+                      target,
+                      this.updateUI.bind(this)
+                    );
+                    break;
+                  case "治疗":
+                    log = currentCharacter.heal(this.updateUI.bind(this));
+                    break;
+                }
+              }
+            } else {
+              // AI 行为：随机攻击
+              const aliveEnemies = this.teamA.filter(
+                (character) => character.isAlive
+              );
+              if (aliveEnemies.length > 0) {
+                const target =
+                  aliveEnemies[Math.floor(Math.random() * aliveEnemies.length)];
+                const skillIndex = Math.floor(
+                  Math.random() * skillTypes.length
+                );
+                switch (skillTypes[skillIndex]) {
+                  case "物理攻击":
+                    log = currentCharacter.physicalAttack(
+                      target,
+                      this.updateUI.bind(this)
+                    );
+                    break;
+                  case "魔法攻击":
+                    log = currentCharacter.magicAttack(
+                      target,
+                      this.updateUI.bind(this)
+                    );
+                    break;
+                  case "治疗":
+                    log = currentCharacter.heal(this.updateUI.bind(this));
+                    break;
+                }
+              }
+            }
+            setLog(log);
+            logs.push(log);
+            // this.updateUI();
+            const winResult = this.checkWinCondition();
+            if (winResult) {
+              // alert(winResult);
+              console.log(logs.join("\n"));
+              return;
+            }
+            await new Promise((resolve, reject) => {
+              setTimeout(() => {
+                resolve(1);
+              }, 2000);
+            });
+          }
+          this.rounding = false;
+        }
+
+        // 自动战斗
+        async autoBattle() {
+          this.isAutoBattle = true;
+          if (!this.rounding) {
+            if (!this.isPaused) {
+              const winResult = this.checkWinCondition();
+              if (!winResult) {
+                this.rounding = true;
+                await this.roundBattle();
+                await this.autoBattle();
               }
             }
           }
-          setLog(log);
-          logs.push(log);
-          // this.updateUI();
-          const winResult = this.checkWinCondition();
-          if (winResult) {
-            // alert(winResult);
-            console.log(logs.join("\n"));
-            return;
-          }
-          await new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve(1);
-            }, fightSpeed.value);
-          });
         }
-        this.rounding = false;
       }
+      const A = ["百事", "丘处机", "一灯大师", "王重阳"];
 
-      // 自动战斗
-      async autoBattle() {
-        this.isAutoBattle = true;
-        if (!this.rounding) {
-          if (!this.isPaused) {
-            const winResult = this.checkWinCondition();
-            if (!winResult) {
-              this.rounding = true;
-              await this.roundBattle();
-              await this.autoBattle();
-            }
-          }
-        }
-      }
+      // 创建角色
+      // const characterA1 = new Character("A1", {
+      //   health: 100,
+      //   attack: 20,
+      //   defense: 10,
+      //   speed: 15,
+      // });
+      // const characterA2 = new Character("A2", {
+      //   health: 100,
+      //   attack: 25,
+      //   defense: 8,
+      //   speed: 20,
+      // });
+      // const characterB1 = new Character("B1", {
+      //   health: 100,
+      //   attack: 18,
+      //   defense: 12,
+      //   speed: 12,
+      // });
+      // const characterB2 = new Character("B2", {
+      //   health: 100,
+      //   attack: 22,
+      //   defense: 9,
+      //   speed: 18,
+      // });
+
+      // const teamA = [characterA1, characterA2];
+      // const teamB = [characterB1, characterB2];
+      const teamA = elm.map((item: any, index: number) => {
+        return new Character(`${A[index]}【我方】`, {
+          health: 100,
+          attack: Number(item.attack),
+          defense: Number(item.defense),
+          speed: Number(item.speed),
+        });
+      });
+      const teamB = elm.map((item: any) => {
+        return new Character(`${item.name}【敌方】`, {
+          health: 100,
+          attack: Math.max(Number(item.attack), Number(item.defense)) + 10,
+          defense: Math.min(Number(item.attack), Number(item.defense)) - 10,
+          speed: Number(item.speed),
+          src: item.src,
+        });
+      });
+      const battleSystem = new BattleSystem(teamA, teamB);
+      battleSystem.initUI();
+      battleSystem.autoBattle();
+      console.log("teamB", teamB);
     }
-    const A = ["百事", "丘处机", "一灯大师", "王重阳"];
-
-    // 创建角色
-    // const characterA1 = new Character("A1", {
-    //   health: 100,
-    //   attack: 20,
-    //   defense: 10,
-    //   speed: 15,
-    // });
-    // const characterA2 = new Character("A2", {
-    //   health: 100,
-    //   attack: 25,
-    //   defense: 8,
-    //   speed: 20,
-    // });
-    // const characterB1 = new Character("B1", {
-    //   health: 100,
-    //   attack: 18,
-    //   defense: 12,
-    //   speed: 12,
-    // });
-    // const characterB2 = new Character("B2", {
-    //   health: 100,
-    //   attack: 22,
-    //   defense: 9,
-    //   speed: 18,
-    // });
-
-    // const teamA = [characterA1, characterA2];
-    // const teamB = [characterB1, characterB2];
-    const teamA = elm.map((item: any, index: number) => {
-      return new Character(`${A[index]}【我方】`, {
-        health: 100,
-        attack: Number(item.attack),
-        defense: Number(item.defense),
-        speed: Number(item.speed),
-        src: `/npc/${index + 1}.jpg`,
-      });
-    });
-    const teamB = elm.map((item: any, index: number) => {
-      return new Character(`${item.name}【敌方】`, {
-        health: 100,
-        attack: Math.max(Number(item.attack), Number(item.defense)) + 10,
-        defense: Math.min(Number(item.attack), Number(item.defense)) - 10,
-        speed: Number(item.speed),
-        src: `/npc/${index + 5}.jpg`,
-      });
-    });
-    const battleSystem = new BattleSystem(teamA, teamB);
-    battleSystem.initUI();
-    battleSystem.autoBattle();
-    console.count("fight init");
   }, []);
-
   return (
     <div className={styles.wrap}>
       <div className={styles.buttons}>
@@ -342,11 +334,8 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
           </p>
           <div>
             <button
-              onClick={(e) => {
-                fightSpeed.value = 100;
-
-                e.preventDefault();
-                e.stopPropagation();
+              onClick={() => {
+                set;
               }}
             >
               战斗加速
@@ -404,8 +393,8 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
             src="/icons/succsess.png"
             alt=""
             onClick={(e) => {
-              inited = false;
               onClick(res);
+              tag = true;
               e.preventDefault();
               e.stopPropagation();
             }}
@@ -421,6 +410,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
             alt=""
             onClick={(e) => {
               onClick(res);
+              tag = true;
               e.preventDefault();
               e.stopPropagation();
             }}

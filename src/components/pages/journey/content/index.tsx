@@ -15,6 +15,7 @@ import Typewriter from "../components/TypeWriter";
 import Fighter from "../components/Fighter";
 import _ from "lodash";
 import npcList from "@/lib/npclist";
+import localforage from "localforage";
 import ev from "@/lib/ev";
 function replaceAllEscapes(str) {
   console.log("pre str", str);
@@ -43,6 +44,7 @@ const transfer = (list) => {
     type: "fight",
     content: [],
   };
+
   _list.forEach((item) => {
     // if (item.includes("[场景]")) {
     //   rs.push({
@@ -86,12 +88,11 @@ const transfer = (list) => {
       // });
     }
   });
-
-  if (option.content.length !== 0 && fight.content.length === 0) {
-    rs.push(option);
-  }
   if (fight.content.length !== 0) {
     rs.push(fight);
+  }
+  if (option.content.length !== 0 && fight.content.length === 0) {
+    rs.push(option);
   }
 
   return rs;
@@ -241,6 +242,14 @@ const Main = () => {
     startAI(item);
   };
   const handleClose = () => setOpen(false);
+
+  useEffect(() => {
+    localforage.getItem("access_token").then((data) => {
+      if (data) {
+        startAI("");
+      }
+    });
+  }, []);
   return (
     <div
       className={styles.wrap}

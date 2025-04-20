@@ -16,6 +16,7 @@ import Fighter from "../components/Fighter";
 import _ from "lodash";
 import npcList from "@/lib/npclist";
 import localforage from "localforage";
+import { useRouter } from "next/navigation";
 import ev from "@/lib/ev";
 function replaceAllEscapes(str) {
   console.log("pre str", str);
@@ -123,7 +124,7 @@ const Main = () => {
   const [current, setCurrent] = useState(false);
   const [scene, setScene] = useState("/img/赤壁之战/场景/清江峡口/0.png");
   const [step, setStep] = useState("-1");
-
+  const router = useRouter();
   useEffect(() => {
     // if(current.type === 'narration'){
     // }
@@ -247,6 +248,8 @@ const Main = () => {
     localforage.getItem("access_token").then((data) => {
       if (data) {
         startAI("");
+      } else {
+        router.push("/user/login");
       }
     });
   }, []);

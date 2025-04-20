@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   Container,
   TextField,
@@ -163,6 +164,11 @@ const RegisterForm = () => {
                   control={<Checkbox color="primary" />}
                   label="我已阅读并同意服务条款"
                 />
+                <Button variant="text" size="small">
+                  <Link href="/user/login" replace>
+                    登录
+                  </Link>
+                </Button>
               </Grid>
 
               <Grid item xs={12}>

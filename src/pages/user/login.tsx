@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   Container,
   TextField,
@@ -160,6 +161,11 @@ const LoginForm = () => {
                     label="记住我"
                     onChange={handleChange("remember")}
                   />
+                  <Button variant="text" size="small">
+                    <Link href="/user/register" replace>
+                      注册
+                    </Link>
+                  </Button>
                   <Button variant="text" size="small">
                     忘记密码？
                   </Button>

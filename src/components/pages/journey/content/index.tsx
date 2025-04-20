@@ -70,9 +70,9 @@ const transfer = (list) => {
       option.content.push(item.replaceAll("[选项]", ""));
     }
     if (item.includes("[战斗]")) {
-      const _fight = item.split("[战斗]");
-      if (_fight[0].includes("=>")) {
-        const fighter = _fight[0].split("=>");
+      const _fight = item.replaceAll("[战斗]");
+      if (_fight.includes("=>")) {
+        const fighter = _fight.split("=>");
         const obj: any = npcList.find((item) =>
           fighter[0].includes(item.character)
         );

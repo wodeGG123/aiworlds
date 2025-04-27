@@ -65,6 +65,36 @@ const LoginForm = () => {
         if (formData.remember) {
           localforage.setItem("access_token", res.data.access_token);
         }
+        axios({
+          url: "/api/user/cards",
+          method: "get",
+        }).then((res) => {
+          console.log(res);
+
+          const myCardsReq = [];
+          for (let index = 0; index < res.data.length; index++) {
+            const element = res.data[index];
+            myCardsReq.push(
+              axios({
+                url: "/api/card/info",
+                method: "get",
+                params: {
+                  cardId: element.card_id,
+                },
+              })
+            );
+          }
+          Promise.all(myCardsReq).then((res) => {
+            console.log(res);
+            const myCards = [];
+            for (let index = 0; index < res.length; index++) {
+              const element = res[index];
+              myCards.push(element.data);
+            }
+            localforage.setItem("my-cards", myCards);
+          });
+        });
+
         router.push("/journey/content");
       });
     }

@@ -4,11 +4,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const rawCookies = req.headers.cookie || "";
+
   try {
     const response = await axios({
-      url: "https://iablikcamuku.sealoshzh.site/api/v1/auth/login",
-      method: "post",
-      params: req.body,
+      url: `https://iablikcamuku.sealoshzh.site/api/v1/cards/${req.query.cardId}`,
+      method: "get",
+      headers: {
+        Cookie: rawCookies,
+        "Content-Type": "application/json",
+      },
     });
     // 透传响应头和状态码
     res.status(response.status);

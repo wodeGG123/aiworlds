@@ -5,6 +5,7 @@ import Card from "@/components/Card";
 import LevelLine from "@/components/LevelLine";
 import CardFight from "@/components/CardFight";
 import _ from "lodash";
+import localforage from "localforage";
 let tag = true;
 let res = "战斗胜利";
 const logs = [];
@@ -261,7 +262,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
           }
         }
       }
-      const A = ["百事", "丘处机", "一灯大师", "王重阳"];
+      // const A = ["百事", "丘处机", "一灯大师", "王重阳"];
 
       // 创建角色
       // const characterA1 = new Character("A1", {
@@ -291,27 +292,34 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
 
       // const teamA = [characterA1, characterA2];
       // const teamB = [characterB1, characterB2];
-      const teamA = elm.map((item: any, index: number) => {
-        return new Character(`${A[index]}【我方】`, {
-          health: 100,
-          attack: Math.max(Number(item.attack), Number(item.defense)) + 30,
-          defense: Math.min(Number(item.attack), Number(item.defense)) + 10,
-          speed: Number(item.speed),
+
+      const go = async () => {
+        const A: any = await localforage.getItem("my-cards");
+
+        const teamA = elm.map((item: any, index: number) => {
+          return new Character(`${A[index].name}【我方】`, {
+            health: 100,
+            attack: Math.max(Number(item.attack), Number(item.defense)) + 30,
+            defense: Math.min(Number(item.attack), Number(item.defense)) + 10,
+            speed: Number(item.speed),
+            src: `/img/赤壁之战/人物/${A[index].name}/0.png`,
+          });
         });
-      });
-      const teamB = elm.map((item: any) => {
-        return new Character(`${item.name}【敌方】`, {
-          health: 100,
-          attack: Math.max(Number(item.attack), Number(item.defense)) + 10,
-          defense: Math.min(Number(item.attack), Number(item.defense)) - 10,
-          speed: Number(item.speed),
-          src: item.src,
+        const teamB = elm.map((item: any) => {
+          return new Character(`${item.name}【敌方】`, {
+            health: 100,
+            attack: Math.max(Number(item.attack), Number(item.defense)) + 10,
+            defense: Math.min(Number(item.attack), Number(item.defense)) - 10,
+            speed: Number(item.speed),
+            src: item.src,
+          });
         });
-      });
-      const battleSystem = new BattleSystem(teamA, teamB);
-      battleSystem.initUI();
-      battleSystem.autoBattle();
-      console.log("teamB", teamB);
+        const battleSystem = new BattleSystem(teamA, teamB);
+        battleSystem.initUI();
+        battleSystem.autoBattle();
+        console.log("teamB", teamB);
+      };
+      go();
     }
   }, []);
   return (

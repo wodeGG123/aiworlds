@@ -135,7 +135,9 @@ const Main = () => {
       const obj: any = npcList.find((item) =>
         current.name.includes(item.character)
       );
-      rs = `/img/赤壁之战/人物/${obj.character}/1.png`;
+      if (obj) {
+        rs = `/img/赤壁之战/人物/${obj.character}/1.png`;
+      }
     }
     return rs;
   }, [current]);
@@ -252,6 +254,15 @@ const Main = () => {
         router.push("/user/login");
       }
     });
+    // axios({
+    //   url: "/api/card/info",
+    //   method: "get",
+    //   data: {
+    //     cardId: "67ffc19de478a528a0c3ae53",
+    //   },
+    // }).then((res) => {
+    //   console.log(res);
+    // });
   }, []);
   return (
     <div

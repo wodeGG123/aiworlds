@@ -68,7 +68,13 @@ const transfer = (list) => {
       });
     }
     if (item.includes("[选项]")) {
-      option.content.push(item.replaceAll("[选项]", ""));
+      const optionContent = item.replaceAll("[选项]", "");
+      if (
+        optionContent.trim() !== "" &&
+        optionContent.replaceAll(" ", "") !== ""
+      ) {
+        option.content.push(optionContent);
+      }
     }
     if (item.includes("[战斗]")) {
       const _fight = item.replaceAll("[战斗]");
@@ -80,7 +86,7 @@ const transfer = (list) => {
         fight.content.push({
           ...obj,
           name: obj.character,
-          src: `/img/赤壁之战/人物/${obj.character}/0.png`,
+          src: `/img/赤壁之战/人物/${obj.character}/0_min.png`,
         });
       }
       // rs.push({
@@ -116,7 +122,7 @@ let msgs = [
     content: systemContent,
   },
 ];
-
+const LazyIMG = () => {};
 const Main = () => {
   const [status, setStatus] = useState(0);
   const [open, setOpen] = React.useState(false);
@@ -136,7 +142,7 @@ const Main = () => {
         current.name.includes(item.character)
       );
       if (obj) {
-        rs = `/img/赤壁之战/人物/${obj.character}/1.png`;
+        rs = `/img/赤壁之战/人物/${obj.character}/1_min.png`;
       }
     }
     return rs;
@@ -168,7 +174,7 @@ const Main = () => {
     for (let index = 0; index < ev.length; index++) {
       const element = ev[index];
       if (t.includes(element)) {
-        setScene(`/img/赤壁之战/场景/${element}/0.png`);
+        setScene(`/img/赤壁之战/场景/${element}/0_min.png`);
         return;
       }
     }
@@ -264,6 +270,11 @@ const Main = () => {
     //   console.log(res);
     // });
   }, []);
+  function handleImageLoad(e) {
+    console.log(e);
+
+    console.log("Image loaded!");
+  }
   return (
     <div
       className={styles.wrap}
@@ -272,7 +283,12 @@ const Main = () => {
       }}
     >
       <div className={styles.npc}>
-        <img src={currentNPCsrc} alt="" />
+        <img
+          src={currentNPCsrc}
+          alt="ccc"
+          data-img="/img/赤壁之战/人物/魏国弩手/1_min.png"
+          onLoad={handleImageLoad}
+        />
       </div>
       <div
         className={styles.content}

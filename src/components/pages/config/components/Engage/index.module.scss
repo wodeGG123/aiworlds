@@ -6,6 +6,7 @@
   position: relative;
   .cardContent {
     padding: 12px;
+    padding-top: 30px;
     width: 100%;
     height: calc(100vh - 66px);
     overflow: auto;
@@ -14,7 +15,7 @@
       justify-content: space-around;
       flex-wrap: wrap;
       & > div {
-        margin-bottom: 24px;
+        margin-bottom: 10px;
       }
     }
   }

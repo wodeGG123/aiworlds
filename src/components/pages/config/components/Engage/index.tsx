@@ -44,7 +44,13 @@ const Main = () => {
                 <Card size="mid" name="曹操" level="3" />
               </div>
               <div>
-                <Card size="mid" name="曹操" level="3" />
+                <Card
+                  size="mid"
+                  name="曹操"
+                  level="3"
+                  quality="blue"
+                  star="3"
+                />
               </div>
               <div>
                 <Card size="mid" name="曹操" level="3" />
@@ -53,7 +59,7 @@ const Main = () => {
                 <Card size="mid" name="曹操" level="3" />
               </div>
               <div>
-                <Card size="mid" name="曹操" level="3" />
+                <Card size="mid" name="曹操" level="99" star="5" />
               </div>
               <div>
                 <Card size="mid" name="曹操" level="3" />
@@ -62,7 +68,7 @@ const Main = () => {
                 <Card size="mid" name="曹操" level="3" />
               </div>
               <div>
-                <Card size="mid" name="曹操" level="3" />
+                <Card size="mid" name="曹操" level="3" quality="orange" />
               </div>
               <div>
                 <Card size="mid" name="曹操" level="3" />
@@ -71,7 +77,7 @@ const Main = () => {
                 <Card size="mid" name="曹操" level="3" />
               </div>
               <div>
-                <Card size="mid" name="曹操" level="3" />
+                <Card size="mid" name="曹操" quality="purple" level="3" />
               </div>
               <div>
                 <Card size="mid" name="曹操" level="3" />
@@ -110,7 +116,7 @@ const Main = () => {
           </div>
           <div className={styles.backWrap}>
             <img
-              src="/icons/back.png"
+              src="/img/back.png"
               alt=""
               onClick={() => {
                 setShow(false);

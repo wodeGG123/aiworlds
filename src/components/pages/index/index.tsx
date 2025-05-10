@@ -1,6 +1,7 @@
 "use client";
 import styles from "./index.module.scss";
 import Coin from "@/components/Coin";
+import Badge from "@mui/material/Badge";
 import Link from "next/link";
 import { useEffect } from "react";
 import localforage from "localforage";
@@ -14,22 +15,45 @@ const Main = () => {
       if (data) {
         router.push("/journey/content");
       } else {
-        router.push("/user/login");
+        // router.push("/user/login");
       }
     });
   }, []);
   return (
     <div className={styles.wrap}>
       <div className={styles.topWrap}>
-        <img src="/img/TOUXIANG1.png" alt="" />
+        <div className={styles.levelWrap}>
+          <span>Lv 60</span>
+        </div>
         <div className={styles.topItemWrap}>
-          <Coin />
           <p>狐狸弟弟</p>
-          <p>45级</p>
+          <p>ID: 3785364</p>
+        </div>
+      </div>
+      <div className={styles.leftWrap}>
+        <div className={styles.leftItem}>
+          <img src="/img/home_email.png" alt="" />
+          <p>邮件</p>
+        </div>
+        <div className={styles.leftItem}>
+          <img src="/img/home_task.png" alt="" />
+          <p>任务</p>
+        </div>
+      </div>
+      <div className={styles.rightWrap}>
+        <div className={styles.rightItem}>
+          <img src="/img/home_right_coin.png" alt="" />
+          <p>9999</p>
+          <span></span>
+        </div>
+        <div className={styles.rightItem}>
+          <img src="/img/home_right_sp.png" alt="" />
+          <p>99992</p>
+          <span></span>
         </div>
       </div>
       <div className={styles.bottomWrap}>
-        <div>
+        <div style={{ visibility: "hidden" }}>
           <img src="/icons/set.png" alt="" />
           <p>
             <Link href="/config">异常</Link>
@@ -37,13 +61,15 @@ const Main = () => {
         </div>
         <div>
           <Link href="/journey/list">
-            <img src="/icons/hammer.png" alt="" />
+            <img src="/img/home_bottom_center.png" alt="" />
           </Link>
 
           <p>50</p>
         </div>
-        <div style={{ visibility: "hidden" }}>
-          <img src="/icons/set.png" alt="" />
+        <div>
+          <Badge color="secondary" variant="dot">
+            <img src="/img/home_bottom_right.png" alt="" />
+          </Badge>
           <p>异常</p>
         </div>
       </div>

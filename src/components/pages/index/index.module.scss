@@ -6,22 +6,84 @@
   top: 0;
   right: 0;
   bottom: 0;
-  background: url("/img/bg.jpg") center center;
+  background: url("/img/home_bg.png") center center;
   background-size: cover;
   .topWrap {
     padding-top: 20px;
     padding-left: 12px;
     padding-right: 12px;
     display: flex;
+    .levelWrap {
+      width: 100px;
+      height: 40px;
+      background: url("/img/home_level.png") center center;
+      background-size: 100% 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      span {
+        font-size: 12px;
+      }
+    }
     & > img {
       width: 56px;
       height: 56px;
     }
     .topItemWrap {
-      margin-left: 6px;
+      margin-left: -8px;
       & > p {
         margin-top: 4px;
-        line-height: 18px;
+        line-height: 9px;
+        padding-bottom: 3px;
+        padding-left: 8px;
+        padding-right: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      }
+    }
+  }
+  .leftWrap {
+    padding-top: 20px;
+    padding-left: 12px;
+    padding-right: 12px;
+    display: flex;
+    flex-direction: column;
+    .leftItem {
+      width: 36px;
+      margin-bottom: 20px;
+      img {
+        width: 100%;
+      }
+      p {
+        font-size: 14px;
+        line-height: 14px;
+        text-align: center;
+      }
+    }
+  }
+  .rightWrap {
+    position: absolute;
+    top: 36px;
+    right: 0px;
+    padding-right: 12px;
+    .rightItem {
+      height: 20px;
+      display: flex;
+      background: rgba(0, 0, 0, 0.5);
+      margin-bottom: 6px;
+      img {
+        height: 100%;
+      }
+      p {
+        width: 48px;
+        height: 100%;
+        line-height: 20px;
+        padding: 0 4px;
+      }
+      span {
+        height: 20px;
+        width: 20px;
+        background-image: url("/img/home_right_plus.png");
+        background-size: 100% 100%;
       }
     }
   }
@@ -37,19 +99,34 @@
     & > div:first-child,
     & > div:nth-child(3) {
       img {
-        width: 60px;
+        height: 60px;
       }
       p {
-        font-size: 16px;
+        font-size: 14px;
         text-align: center;
+        position: relative;
+        top: -8px;
       }
     }
     & > div:nth-child(2) {
+      position: relative;
+      a {
+        display: block;
+        width: 80px;
+        height: 80px;
+      }
       img {
         width: 80px;
+        height: 80px;
       }
       p {
-        font-size: 32px;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 80px;
+        height: 80px;
+        font-size: 24px;
+        line-height: 100px;
         text-align: center;
       }
     }

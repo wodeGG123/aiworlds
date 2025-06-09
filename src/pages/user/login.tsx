@@ -95,7 +95,7 @@ const LoginForm = () => {
           });
         });
 
-        router.push("/journey/content");
+        // router.push("/journey/content");
       });
     }
   };

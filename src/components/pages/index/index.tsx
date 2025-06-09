@@ -12,11 +12,10 @@ const Main = () => {
   const router = useRouter();
   useEffect(() => {
     localforage.getItem("access_token").then((data) => {
-      console.log(data);
       if (data) {
         router.push("/journey/content");
       } else {
-        // router.push("/user/login");
+        router.push("/user/login");
       }
     });
   }, []);

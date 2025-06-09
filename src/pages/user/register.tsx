@@ -68,9 +68,9 @@ const RegisterForm = () => {
         method: "post",
         data: formData,
       }).then((res) => {
-        if (res.data) {
-          router.push("/api/user/login");
-        }
+        // if (res.data) {
+        //   router.push("/user/login");
+        // }
       });
       console.log("Form  submitted:", formData);
     }

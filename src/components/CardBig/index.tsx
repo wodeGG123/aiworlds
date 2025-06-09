@@ -31,6 +31,7 @@ const Main = ({
   const fontSize = sizeMap[size].fontSize;
   return (
     <div className={`${styles.wrap} ${sizeMap[size]}`}>
+      <h3>{name}</h3>
       <div className={styles.cardWrap}>
         <img src={url} alt="" className={styles.cardImg} />
         <div
@@ -51,10 +52,18 @@ const Main = ({
           }}
         ></div>
       </div>
-
-      <p>
-        {name} Lv: {level}
-      </p>
+      <div className={styles.exp}>
+        <span>经验:</span>
+        <div>
+          <p>456/5465</p>
+          <div></div>
+        </div>
+      </div>
+      <p>Lv: {level}</p>
+      <div className={styles.fightNumber}>
+        <img src="/img/big_card_fight.png" alt="" />
+        <span>战斗力: 2867</span>
+      </div>
     </div>
   );
 };

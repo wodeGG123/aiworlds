@@ -1,87 +1,85 @@
 .wrap {
-  color: #ffffff;
-  position: fixed;
-  font-size: 12px;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-
-  .topWrap {
-    height: 40px;
-    border-bottom: 3px solid #ffffff;
-    padding: 12px;
-    background-color: #2e524f;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background-image: url("/img//yc_bg.png");
+  background-size: 100% 100%;
+  .content {
+    background-color: rgba(0, 0, 0, 0.6);
   }
-
-  .contentWrap {
-    background: url("/img/beijing1.jpg") center center;
-    background-size: cover;
-    height: calc(100vh - 200px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 18px;
-    padding-bottom: 18px;
+  .activeCard {
+    padding: 12px;
+    padding-bottom: 0px;
+    width: 100%;
+    height: 180px;
     overflow: auto;
-    .contentItem {
-      display: flex;
-      align-items: center;
-      padding: 6px 0;
-      .swalWrap {
-        margin-left: 12px;
-      }
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  .divider {
+    background-image: url("/img/yc_divider.png");
+    background-size: 100% 100%;
+    width: 100%;
+    height: 12px;
+    p {
+      text-align: center;
+      color: #ffffff;
+      font-size: 12px;
+      line-height: 12px;
     }
   }
-  .bottomWrap {
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    padding-left: 12px;
-    padding-right: 12px;
-    padding-top: 6px;
+  .cardContent {
+    padding: 12px;
+    padding-top: 0;
+    margin-top: 20px;
     width: 100%;
-    background: url("/img/beijing1_bottom.jpg") center center;
-    background-size: cover;
-    background-repeat: repeat-y;
-    height: 160px;
-    border-top: 3px solid #0e7469;
-    .bottomBlock1 {
+    height: calc(100vh - 94px - 180px - 12px - 20px - 48px);
+    overflow: auto;
+    & > div {
       display: flex;
       justify-content: space-around;
-      div {
-        img {
-          width: 40px;
-        }
-        p {
-          font-size: 12px;
-          text-align: center;
-        }
+      flex-wrap: wrap;
+      & > div {
+        margin-bottom: 10px;
       }
     }
-    .bottomBlock2 {
+  }
+  .buttonsWrap {
+    height: 48px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    padding-right: 12px;
+    background-color: #000000;
+    border-top: 4px solid #063530;
+    .buttonItem {
       display: flex;
-      justify-content: space-between;
-      width: 100%;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      height: 32px;
+      width: 84px;
+      font-size: 18px;
+      background-image: url("/img/yc_info_update.png");
+      background-size: 100% 100%;
+      margin-left: 6px;
     }
-    .bottomBlock2 > div:first-child,
-    .bottomBlock2 > div:nth-child(3) {
-      img {
-        width: 40px;
-      }
-      p {
-        font-size: 16px;
-        text-align: center;
-      }
-    }
-    & > div:nth-child(2) {
-      img {
-        width: 60px;
-      }
-      p {
-        font-size: 24px;
-        text-align: center;
-      }
-    }
+  }
+  .footerWrap {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
+    width: 100%;
+    padding-top: 10px;
+    background-color: #000000;
+  }
+}
+
+.drawerWrap {
+  :global(.MuiDrawer-paper) {
+    background-color: transparent !important;
   }
 }

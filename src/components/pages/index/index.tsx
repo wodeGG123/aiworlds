@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import localforage from "localforage";
 import { useRouter } from "next/navigation";
+import Footer from "@/components/Footer";
 
 const Main = () => {
   const router = useRouter();
@@ -52,26 +53,8 @@ const Main = () => {
           <span></span>
         </div>
       </div>
-      <div className={styles.bottomWrap}>
-        <div style={{ visibility: "hidden" }}>
-          <img src="/icons/set.png" alt="" />
-          <p>
-            <Link href="/config">异常</Link>
-          </p>
-        </div>
-        <div>
-          <Link href="/journey/list">
-            <img src="/img/home_bottom_center.png" alt="" />
-          </Link>
-
-          <p>50</p>
-        </div>
-        <div>
-          <Badge color="secondary" variant="dot">
-            <img src="/img/home_bottom_right.png" alt="" />
-          </Badge>
-          <p>异常</p>
-        </div>
+      <div className={styles.footerWrap}>
+        <Footer />
       </div>
     </div>
   );

@@ -11,51 +11,11 @@
     padding-top: 4px;
   }
 }
-.drawerUpdated {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  padding-top: 40px;
-  .drawerUpdatedTop {
-    width: 160px;
-    height: 80px;
-    position: relative;
-    img {
-      width: 160px;
-      position: absolute;
-    }
-  }
-  .drawerUpdatedCard {
-    margin-top: 10px;
-  }
-  .drawerUpdatedSum {
-    color: #ffffff;
-    ul {
-      li {
-        display: flex;
-        align-items: center;
-        span {
-          font-size: 14px;
-        }
-        img {
-          height: 12px;
-        }
-      }
-    }
-  }
-  .drawerUpdatedConfirm {
-    color: #ffffff;
-  }
-}
 .drawerContent {
   width: 100vw;
   height: 100vh;
   position: relative;
   padding: 6px 12px;
-  background-color: rgba(0, 0, 0, 0.5);
   .drawerContentTop {
     & > p {
       color: #ffffff;
@@ -92,112 +52,6 @@
           background-size: 100% 100%;
         }
       }
-    }
-  }
-  .drawerContentMid {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 40px;
-  }
-  .drawerContentBallWrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 60px;
-    & > img {
-      width: 100%;
-    }
-    & > div {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      .drawerContentBall {
-        width: 44px;
-        height: 44px;
-        background-color: rgba(133, 117, 62, 0.3);
-        border: 1px solid rgba(133, 117, 62, 1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        img {
-          width: 90%;
-          height: 90%;
-        }
-      }
-      .drawerContentBallLine {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        img {
-          height: 3px;
-        }
-      }
-    }
-  }
-  .drawerContentUpdate {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-    & > div {
-      height: 48px;
-      width: 160px;
-      background-image: url("/img/yc_info_update.png");
-      background-size: 100% 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      h5 {
-        color: #ffffff;
-        text-align: center;
-        height: 50%;
-        font-size: 16px;
-        line-height: 30px;
-      }
-      p {
-        color: #ffffff;
-        text-align: center;
-        height: 50%;
-        font-size: 12px;
-        display: flex;
-        align-items: center;
-        img {
-          width: 20px;
-          height: 20px;
-          position: relative;
-          z-index: 2;
-        }
-        span {
-          padding: 2px;
-          width: 60px;
-          background-color: rgba(0, 0, 0, 0.4);
-          position: relative;
-          left: -10px;
-          z-index: 1;
-        }
-      }
-    }
-  }
-  .drawerContentArrow {
-    position: absolute;
-    width: 100%;
-    height: 36px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 12px;
-    left: 0px;
-    top: 240px;
-    img {
-      height: 100%;
-    }
-  }
-  .drawerContentBottom {
-    position: absolute;
-    bottom: 12px;
-    img {
-      height: 32px;
     }
   }
 

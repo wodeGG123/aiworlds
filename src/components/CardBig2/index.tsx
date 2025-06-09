@@ -51,10 +51,7 @@ const Main = ({
           }}
         ></div>
       </div>
-
-      <p>
-        {name} Lv: {level}
-      </p>
+      <h3>{name}</h3>
     </div>
   );
 };

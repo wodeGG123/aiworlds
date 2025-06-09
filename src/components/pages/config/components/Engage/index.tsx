@@ -38,6 +38,23 @@ const Main = () => {
         className={styles.drawerWrap}
       >
         <div className={styles.drawerContent}>
+          <div className={styles.activeCard}>
+            <div>
+              <Card size="mid" name="曹操" level="3" />
+            </div>
+            <div>
+              <Card size="mid" name="曹操" level="3" quality="blue" star="3" />
+            </div>
+            <div>
+              <Card size="mid" name="曹操" level="3" />
+            </div>
+            <div>
+              <Card size="mid" name="曹操" level="3" />
+            </div>
+          </div>
+          <div className={styles.divider}>
+            <p>战力值: 599999</p>
+          </div>
           <div className={styles.cardContent}>
             <div>
               <div>
@@ -78,12 +95,6 @@ const Main = () => {
               </div>
               <div>
                 <Card size="mid" name="曹操" quality="purple" level="3" />
-              </div>
-              <div>
-                <Card size="mid" name="曹操" level="3" />
-              </div>
-              <div>
-                <Card size="mid" name="曹操" level="3" />
               </div>
               <div>
                 <Card size="mid" name="曹操" level="3" />

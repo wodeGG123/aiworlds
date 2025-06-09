@@ -1,0 +1,183 @@
+.wrap {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background-image: url("/img//yc_bg.png");
+  background-size: 100% 100%;
+  .content {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  .activeCard {
+    padding: 12px;
+    padding-bottom: 0px;
+    width: 100%;
+    height: 180px;
+    overflow: auto;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  .divider {
+    background-image: url("/img/yc_divider.png");
+    background-size: 100% 100%;
+    width: 100%;
+    height: 12px;
+    p {
+      text-align: center;
+      color: #ffffff;
+      font-size: 12px;
+      line-height: 12px;
+    }
+  }
+  .cardContent {
+    padding: 12px;
+    padding-top: 0;
+    margin-top: 20px;
+    width: 100%;
+    height: calc(100vh - 180px - 20px);
+    overflow: auto;
+    position: relative;
+    & > div {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      & > div {
+        margin-bottom: 10px;
+        position: relative;
+        .checkedWrap {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          position: absolute;
+          left: 0ox;
+          top: 0px;
+          justify-content: center;
+          align-items: center;
+          img {
+            height: 52px;
+            position: relative;
+            top: -20px;
+          }
+        }
+      }
+    }
+  }
+  .toolsWrap {
+    padding: 12px;
+    border-top: 4px solid #063530;
+    height: 180px;
+    background-color: #000000;
+    position: relative;
+    .toolsContent {
+      border: 1px solid #cccccc;
+      .toolsContentTop {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px 30px;
+        .toolsContentItem {
+          width: 44px;
+          height: 44px;
+          background-color: #000000;
+          border: 2px solid #605133;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transform: rotate(45deg);
+          & > div {
+            width: 90%;
+            height: 90%;
+            border-radius: 100%;
+            .checkedWrap {
+              transform: rotate(-45deg);
+              width: 100%;
+              height: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              img {
+                height: 24px;
+              }
+            }
+          }
+        }
+        .toolsContentItemGreen {
+          & > div {
+            background-color: #0a1a18;
+            border: 2px solid #75c963;
+          }
+        }
+        .toolsContentItemBlue {
+          & > div {
+            background-color: #0a0a1a;
+            border: 2px solid #43baed;
+          }
+        }
+        .toolsContentItemPurple {
+          & > div {
+            background-color: #150830;
+            border: 2px solid #a163d5;
+          }
+        }
+        .toolsContentItemYellow {
+          & > div {
+            background-color: #191101;
+            border: 2px solid #eccc78;
+          }
+        }
+      }
+      .toolsContentBottom {
+        border-top: 1px solid #cccccc;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 20px;
+
+        .toolsContentButton {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #ffffff;
+          height: 32px;
+          width: 120px;
+          font-size: 18px;
+          background-image: url("/img/yc_info_update.png");
+          background-size: 100% 100%;
+        }
+        .toolsContentInfo {
+          & > div {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            img {
+              height: 20px;
+            }
+            span {
+              margin-left: 6px;
+              color: #ffffff;
+            }
+          }
+          & > p {
+            color: #ffffff;
+            font-size: 12px;
+            text-align: right;
+          }
+        }
+      }
+    }
+    .toolsContentBottomClose {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      img {
+        height: 24px;
+      }
+    }
+  }
+}
+
+.drawerWrap {
+  :global(.MuiDrawer-paper) {
+    background-color: transparent !important;
+  }
+}

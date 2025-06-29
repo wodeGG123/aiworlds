@@ -1,0 +1,40 @@
+.wrap {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: url("/img/start_bg.jpg");
+  background-size: 100% 100%;
+  padding-bottom: 100px;
+  p {
+    margin-top: 16px;
+    font-size: 20px;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    background-image: -webkit-linear-gradient(
+      left,
+      #ffffff,
+      #e6d205 25%,
+      #ffffff 50%,
+      #e6d205 75%,
+      #ffffff
+    );
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-background-size: 200% 100%;
+    -webkit-animation: maskedAnimation 4s infinite linear;
+  }
+}
+
+@keyframes maskedAnimation {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}

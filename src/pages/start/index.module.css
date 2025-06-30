@@ -28,7 +28,30 @@
     -webkit-animation: maskedAnimation 4s infinite linear;
   }
 }
-
+.loadingWrap {
+  width: 100vw;
+  position: absolute;
+  left: 0;
+  bottom: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  p {
+    font-size: 20px;
+    color: #ffffff;
+  }
+  & > div {
+    margin-top: 10px;
+    width: 80%;
+    height: 7px;
+    background-color: rgba(0, 0, 0, 0.6);
+    div {
+      height: 100%;
+      background-color: #f60;
+    }
+  }
+}
 @keyframes maskedAnimation {
   0% {
     background-position: 0 0;

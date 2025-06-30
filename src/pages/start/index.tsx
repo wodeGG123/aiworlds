@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Loading from "./Loading";
 import styles from "./index.module.css";
 const Main = () => {
   const [loading, setLoading] = useState(false);
@@ -15,6 +16,7 @@ const Main = () => {
     >
       <img src="/icons/logo.svg" alt="" />
       <p>Knight of Valheim</p>
+      {loading && <Loading />}
     </div>
   );
 };

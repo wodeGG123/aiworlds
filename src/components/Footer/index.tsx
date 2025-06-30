@@ -13,7 +13,7 @@ const Main = () => {
     localforage.getItem("access_token").then((data) => {
       console.log(data);
       if (data) {
-        router.push("/journey/content");
+        // router.push("/journey/content");
       } else {
         // router.push("/user/login");
       }
@@ -25,27 +25,24 @@ const Main = () => {
   return (
     <div className={styles.wrap}>
       <div>
-        <img src="/img/home_bottom_left.png" alt="" />
-        <p>
-          <Link href="/config">公司</Link>
-        </p>
+        <img src="/icons/icon_menu_1.png" alt="" />
+        <p>庄园</p>
       </div>
       <div>
-        <Link href="/journey/list">
-          <img src="/img/home_bottom_center.png" alt="" />
-        </Link>
-
-        <p>50</p>
+        <img src="/icons/icon_menu_2.png" alt="" />
+        <p>融合</p>
       </div>
-      <div
-        onClick={() => {
-          routerGo("/config");
-        }}
-      >
-        <Badge color="secondary" variant="dot">
-          <img src="/img/home_bottom_right.png" alt="" />
-        </Badge>
-        <p>异常</p>
+      <div>
+        <img src="/icons/icon_menu_3.png" alt="" />
+        <p>冒险</p>
+      </div>
+      <div>
+        <img src="/icons/icon_menu_4.png" alt="" />
+        <p>圣物</p>
+      </div>
+      <div>
+        <img src="/icons/icon_menu_5.png" alt="" />
+        <p>猎魔人</p>
       </div>
     </div>
   );

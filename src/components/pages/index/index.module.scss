@@ -6,87 +6,49 @@
   top: 0;
   right: 0;
   bottom: 0;
-  background: url("/img/home_bg.png") center center;
+  background: url("/img/home_bg.jpg") center center;
   background-size: cover;
   .topWrap {
     padding-top: 20px;
     padding-left: 12px;
     padding-right: 12px;
     display: flex;
-    .levelWrap {
-      width: 100px;
-      height: 40px;
-      background: url("/img/home_level.png") center center;
-      background-size: 100% 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    justify-content: space-between;
+    align-items: center;
+    .userWrap {
       span {
         font-size: 12px;
+        color: #f9dca0;
       }
     }
-    & > img {
-      width: 56px;
-      height: 56px;
-    }
+
     .topItemWrap {
-      margin-left: -8px;
-      & > p {
-        margin-top: 4px;
-        line-height: 9px;
-        padding-bottom: 3px;
-        padding-left: 8px;
-        padding-right: 8px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-      }
-    }
-  }
-  .leftWrap {
-    padding-top: 20px;
-    padding-left: 12px;
-    padding-right: 12px;
-    display: flex;
-    flex-direction: column;
-    .leftItem {
-      width: 36px;
-      margin-bottom: 20px;
-      img {
-        width: 100%;
-      }
-      p {
-        font-size: 14px;
-        line-height: 14px;
-        text-align: center;
-      }
-    }
-  }
-  .rightWrap {
-    position: absolute;
-    top: 36px;
-    right: 0px;
-    padding-right: 12px;
-    .rightItem {
-      height: 20px;
       display: flex;
-      background: rgba(0, 0, 0, 0.5);
-      margin-bottom: 6px;
-      img {
-        height: 100%;
+      align-items: center;
+      margin-right: -30px;
+      .topItemCurrency {
+        width: 30px;
+        height: 30px;
+        position: relative;
+        left: 30px;
       }
-      p {
-        width: 48px;
-        height: 100%;
-        line-height: 20px;
-        padding: 0 4px;
+      .topItemPlus {
+        width: 30px;
+        height: 30px;
+        transform: rotate(90deg);
+        position: relative;
+        right: 30px;
       }
-      span {
-        height: 20px;
-        width: 20px;
-        background-image: url("/img/home_right_plus.png");
-        background-size: 100% 100%;
+      & > p {
+        padding: 0 40px;
+        height: 22px;
+        line-height: 22px;
+        border-radius: 22px;
+        background-color: rgba(0, 0, 0, 0.6);
       }
     }
   }
+
   .footerWrap {
     position: absolute;
     left: 0px;

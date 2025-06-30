@@ -32,63 +32,6 @@ const Main = () => {
         <div>
           <CardStory size="mid" />
         </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
-        <div>
-          <CardStory size="mid" />
-        </div>
       </div>
       <div className={styles.backWrap}>
         <Link href="/">

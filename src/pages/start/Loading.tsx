@@ -1,20 +1,13 @@
 import { useState } from "react";
 import styles from "./index.module.css";
 const Main = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   return (
-    <div
-      className={styles.wrap}
-      style={
-        loading
-          ? {
-              backgroundImage: 'url("/img/start_loading_bg.jpg")',
-            }
-          : {}
-      }
-    >
-      <p>Loading</p>
-      <div></div>
+    <div className={styles.loadingWrap}>
+      <p>80%</p>
+      <div>
+        <div style={{ width: "80%" }}></div>
+      </div>
     </div>
   );
 };

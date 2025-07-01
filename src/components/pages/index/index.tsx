@@ -39,9 +39,7 @@ const Main = () => {
           />
         </div>
       </div>
-      <div className={styles.footerWrap}>
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };

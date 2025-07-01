@@ -1,0 +1,25 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  margin-right: -30px;
+  .topItemCurrency {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    left: 30px;
+  }
+  .topItemPlus {
+    width: 30px;
+    height: 30px;
+    transform: rotate(90deg);
+    position: relative;
+    right: 30px;
+  }
+  & > p {
+    padding: 0 40px;
+    height: 22px;
+    line-height: 22px;
+    border-radius: 22px;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}

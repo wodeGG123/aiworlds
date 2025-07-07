@@ -1,5 +1,5 @@
 .wrap {
-  background: url("/img/720db9dd-bba4-4f77-a661-be24ace9e105.jpg") center center;
+  background: url("/img/journey_bg_1.jpg") center center;
   background-size: 100% 100%;
   color: #ffffff;
   position: fixed;
@@ -8,23 +8,94 @@
   top: 0;
   right: 0;
   bottom: 0;
-  .content {
-    margin-top: 160px;
-    padding: 12px;
-    background-color: rgba(0, 0, 0, 0.4);
-    font-size: 16px;
+  .resourceWrap {
+    display: flex;
+    padding-top: 12px;
+    padding-right: 12px;
+    justify-content: flex-end;
   }
+  .content {
+    padding: 12px;
+    padding-bottom: 0;
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    .contentItem {
+      position: relative;
+      .contentItemBg {
+        position: relative;
+        width: 100%;
+      }
+      .contentTextWrap {
+        position: absolute;
+        top: 16px;
+        right: 32px;
+        color: #fcd587;
+        h3 {
+          margin-top: 8px;
+          font-size: 16px;
+          font-weight: normal;
+        }
+        h5 {
+          font-size: 12px;
+          font-weight: normal;
+        }
+        img {
+          width: 74px;
+        }
+      }
+      .contentNumberWrap {
+        position: absolute;
+        right: 4px;
+        bottom: 10px;
+        display: flex;
+        align-items: center;
+        img {
+          width: 16px;
+          height: 16px;
+        }
+        span {
+          line-height: 14px;
+          margin-left: 4px;
+        }
+      }
+    }
+  }
+  .achievements {
+    margin: 0 12px;
+    padding: 12px 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+    dl {
+      margin-bottom: 16px;
+      padding: 0 15px;
+      dt {
+        span {
+          font-size: 16px;
+          color: #f9dca0;
+        }
+        margin-bottom: 4px;
+      }
+      dd {
+        line-height: 22px;
+        font-size: 12px;
+        color: #ffffff;
+      }
+    }
+  }
+
   .backWrap {
     height: 60px;
     width: 100%;
     position: absolute;
     left: 0;
     bottom: 0;
+    padding-left: 12px;
     padding-right: 12px;
     display: flex;
     align-items: center;
     border-top: 2px solid #0e7469;
-    justify-content: flex-end;
+    justify-content: space-between;
     img {
       height: 44px;
     }
@@ -103,6 +174,21 @@
         font-size: 24px;
         text-align: center;
       }
+    }
+  }
+  .bottom {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    height: 60px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.4);
+    img {
+      height: 30px;
     }
   }
 }

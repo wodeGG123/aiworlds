@@ -2,7 +2,7 @@ import styles from "./index.module.scss";
 import Drawer from "@mui/material/Drawer";
 import Coin from "@/components/Coin";
 import Footer from "@/components/Footer";
-import Card from "@/components/Card";
+import Relic from "@/components/Relic";
 import LevelLine from "@/components/LevelLine";
 import Tooltip from "@mui/material/Tooltip";
 import { useRouter } from "next/navigation";
@@ -38,20 +38,35 @@ const Main = () => {
         </p>
         <ul>
           <li>
-            <img src="" alt="" />
+            <img src="/icons/relic_icon_1.png" alt="" />
+            <p>Darkness Attack</p>
+            <span>2.241</span>
+          </li>
+          <li>
+            <img src="/icons/relic_icon_1.png" alt="" />
+            <p>Darkness Attack</p>
+            <span>2.241</span>
+          </li>
+          <li>
+            <img src="/icons/relic_icon_1.png" alt="" />
             <p>Darkness Attack</p>
             <span>2.241</span>
           </li>
         </ul>
       </div>
+      <div className={styles.numbers}>
+        <div className={styles.numbersItem1}>
+          <Relic size="mid" name="曹操" level="3" quality="blue" star="3" />
+          <span>1/10</span>
+        </div>
+        <div className={styles.numbersItem2}>
+          <img src="/icons/force_004_1.png" alt="" />
+          <span>2,594/99999</span>
+        </div>
+      </div>
       <div className={styles.bottom}>
-        <img src="/icons/Button_tiny_arrowleft.png" alt="" />
-        <img src="/icons/bt1.png" alt="" />
-        <img
-          style={{ visibility: "hidden" }}
-          src="/icons/Button_tiny_arrowleft.png"
-          alt=""
-        />
+        <img src="/icons/relic_bt1.png" alt="" />
+        <img src="/icons/relic_bt2.png" alt="" />
       </div>
       <Modal className={styles.modalWrap} open={open} onClose={handleClose}>
         <div

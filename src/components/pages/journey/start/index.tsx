@@ -1,35 +1,68 @@
 import styles from "./index.module.scss";
+import Link from "next/link";
 import Coin from "@/components/Coin";
 import Card from "@/components/Card";
-import LevelLine from "@/components/LevelLine";
-import CardStory from "@/components/CardStory";
-import Link from "next/link";
-const ItemCompontent = () => {
-  return (
-    <div className={styles.contentItem}>
-      <Card size="small" />
-      <div className={styles.swalWrap}>
-        <LevelLine />
-        <p>曹操 +3</p>
-      </div>
-    </div>
-  );
-};
+import Resource from "@/components/Resource";
+import Footer from "@/components/Footer";
 
 const Main = () => {
   return (
     <div className={styles.wrap}>
-      <div className={styles.content}>
-        在东汉末年，曹操率领大军南下攻打刘备和孙权联军。在赤壁这个地方，周瑜与诸葛亮联手制定了火攻策略。诸葛亮借东风之助，
-        安排士兵用草船诱敌，然后点燃船只将火势蔓延至曹军的战船。
-        <br />
-        大火迅速蔓延开来，曹军船只失火，加上风势加剧，最终导致大量船只燃烧并倾覆。曹操的大军在水面上遭受重创，损失惨重。这
-        场以少胜多的经典战役扭转了三国时期的局势，奠定了孙刘联盟的基础。
+      <div className={styles.resourceWrap} style={{ visibility: "hidden" }}>
+        <Resource />
       </div>
-      <div className={styles.backWrap}>
-        <Link href="/journey/content">
-          <img src="/icons/forward.png" alt="" />
-        </Link>
+      <div className={styles.content}>
+        <div className={styles.contentItem}>
+          <img
+            src="/img/journey_img_1.png"
+            className={styles.contentItemBg}
+            alt=""
+          />
+          <div className={styles.contentTextWrap}>
+            <h5>Chapter 1</h5>
+            <h3>Cursed Dragon</h3>
+            <img src="/icons/journey_list_line.png" alt="" />
+          </div>
+          <div className={styles.contentNumberWrap}>
+            <img src="/icons/journey_icon_1.svg" alt="" />
+            <span>10/20</span>
+          </div>
+        </div>
+      </div>
+      <div className={styles.achievements}>
+        <dl>
+          <dt>
+            <span>血月</span>
+          </dt>
+          <dd>~腐化达到30</dd>
+          <dd>~总共冒险达到130/200轮的撒大苏打实打实大苏打实打实 大萨达萨达</dd>
+          <dd>~触发剧情：爱的供养</dd>
+        </dl>
+        <dl>
+          <dt>
+            <span>血月</span>
+          </dt>
+          <dd>~腐化达到30</dd>
+          <dd>~总共冒险达到130/200轮的撒大苏打实打实大苏打实打实 大萨达萨达</dd>
+          <dd>~触发剧情：爱的供养</dd>
+        </dl>
+        <dl>
+          <dt>
+            <span>血月</span>
+          </dt>
+          <dd>~腐化达到30</dd>
+          <dd>~总共冒险达到130/200轮的撒大苏打实打实大苏打实打实 大萨达萨达</dd>
+          <dd>~触发剧情：爱的供养</dd>
+        </dl>
+      </div>
+      <div className={styles.bottom}>
+        <img src="/icons/Button_tiny_arrowleft.png" alt="" />
+        <img src="/icons/bt1.png" alt="" style={{ visibility: "hidden" }} />
+        <img
+          style={{ visibility: "hidden" }}
+          src="/icons/Button_tiny_arrowleft.png"
+          alt=""
+        />
       </div>
     </div>
   );

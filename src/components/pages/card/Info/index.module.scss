@@ -3,35 +3,60 @@
   height: 100vh;
   overflow: hidden;
   position: relative;
+  & > img {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   .top {
-    height: 100px;
-    padding: 6px 12px;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    padding: 12px 0 0 12px;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
     background-color: #000000;
-
-    .quality {
-      padding: 6px;
+    position: absolute;
+    .topLeft {
+      z-index: 1;
+      color: #fcd587;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
       img {
-        height: 48px;
+        height: 20px;
       }
     }
-    .purple {
-      background-color: #281d35;
-      border-bottom: 2px solid #863b99;
-    }
-    .title {
-      margin-left: 12px;
-      color: #ffffff;
-      h2 {
-      }
-      h4 {
+    .topRight {
+      z-index: 1;
+      .topRightItem {
+        margin-bottom: 4px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        img {
+          height: 30px;
+          position: relative;
+          left: 6px;
+        }
+        span {
+          color: #fcd587;
+          font-size: 12px;
+          padding: 1px 0;
+          width: 60px;
+          text-align: center;
+          border-top: 1px solid rgba(255, 255, 255, 0.2);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
       }
     }
   }
   .content {
-    width: 100%;
-    height: calc(100vh - 100px - 60px);
+    width: 100vwvw;
+    height: 100vh;
     position: relative;
     & > img {
       position: absolute;
@@ -43,86 +68,52 @@
     .contentLeft {
       position: absolute;
       left: 0;
-      bottom: 0;
-      width: 200px;
+      bottom: 100px;
       .contentLeftLv {
-        height: 60px;
-        padding: 0 12px;
-        background-color: rgba(107, 69, 146, 0.8);
+        height: 32px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
         span {
-          font-size: 24px;
-          color: #ffffff;
+          font-size: 32px;
+          color: #fcd587;
         }
         img {
-          height: 40px;
+          height: 32px;
         }
       }
       .contentLeftInfo {
-        background-color: rgba(0, 0, 0, 0.8);
+        background-color: rgba(0, 0, 0, 0.4);
         li {
           display: flex;
           align-items: center;
-          color: #ffffff;
-          padding: 6px 0;
+          color: #fcd587;
+          padding: 6px 20px 6px 12px;
           margin: 0;
-          div {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            img {
-              // height: 24px;
-              width: 24px;
-            }
-          }
-          p {
-            display: flex;
-            align-items: center;
-          }
-          span {
-            margin-right: 16px;
-          }
         }
       }
     }
     .contentRight {
       position: absolute;
       right: 0px;
-      bottom: 0px;
-      width: 112px;
-      padding-right: 12px;
-      .contentRightItem1 {
+      bottom: 100px;
+
+      .contentRightItem {
+        background-color: rgba(0, 0, 0, 0.4);
         li {
           width: 100px;
-          height: 36px;
-          font-size: 18px;
-          line-height: 36px;
-          text-align: center;
-          background-image: url(/img/info_bg.png);
-          background-size: 100% 100%;
-          color: #fff;
+          height: 30px;
+          font-size: 12px;
+          line-height: 30px;
+          display: flex;
+          align-items: center;
+          color: #fcd587;
           list-style: none;
+          margin-bottom: 0;
         }
       }
-      .contentRightItem2 {
-        margin-top: 10px;
-        display: flex;
-        align-items: flex-end;
-        flex-direction: column;
-        li {
-          width: 80px;
-          height: 28px;
-          font-size: 14px;
-          line-height: 28px;
-          text-align: center;
-          background-image: url(/img/info_bg.png);
-          background-size: 100% 100%;
-          color: #fff;
-          list-style: none;
+      .contentRightDivider {
+        img {
+          width: 100px;
         }
       }
     }
@@ -146,29 +137,7 @@
       }
     }
   }
-  .baseInfo {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 12px;
-    background-color: rgba(0, 0, 0, 0.8);
-    ul {
-      li {
-        list-style: none;
-        display: flex;
-        div {
-          width: 32px;
-          img {
-            height: 24px;
-          }
-        }
-        span {
-          color: #ffffff;
-          margin-left: 6px;
-        }
-      }
-    }
-  }
+
   .bottom {
     position: absolute;
     width: 100%;
@@ -178,9 +147,10 @@
     padding: 0 12px;
     display: flex;
     align-items: center;
-    background-color: #000000;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.4);
     img {
-      height: 32px;
+      height: 30px;
     }
   }
 }

@@ -16,95 +16,89 @@ const Main = () => {
   const handleClose = () => setOpen(false);
   return (
     <div className={styles.wrap}>
+      <img src="/img/Hero_01.jpg" alt="" />
       <div className={styles.top}>
-        <div className={`${styles.quality} ${styles.purple}`}>
-          <img src="/img/card/star_4.png" alt="" />
+        <div className={styles.topLeft}>
+          <img src="/img/card/card_top_left.svg" alt="" />
+          <span>奥赛罗二</span>
         </div>
-        <div className={styles.title}>
-          <h2>曹操</h2>
-          <h4>意识曹操</h4>
+        <div className={styles.topRight}>
+          <div className={styles.topRightItem}>
+            <img src="/icons/icon_currency.png" alt="" />
+            <span>297</span>
+          </div>
+          <div className={styles.topRightItem}>
+            <img src="/icons/icon_currency.png" alt="" />
+            <span>297</span>
+          </div>
+          <div className={styles.topRightItem}>
+            <img src="/icons/icon_currency2.svg" alt="" />
+            <span>297</span>
+          </div>
         </div>
       </div>
       <div className={styles.content}>
-        <img src="/img/card/purple.png" alt="" />
         <div className={styles.contentLeft}>
           <div className={styles.contentLeftLv}>
-            <span>Lv: 99</span>
-            <img src="/img/update.png" alt="" />
+            <img src="/icons/star.svg" alt="" />
+            <span>99</span>
           </div>
 
           <ul className={styles.contentLeftInfo}>
-            <li>
-              <div>
-                <img src="/img/gemstone.png" alt="" />
-              </div>
-              <p>4564 / 5046</p>
-            </li>
-            <li>
-              <div>
-                <img src="/img/info_1.png" alt="" />
-              </div>
-              <p>
-                <span>力量: 93</span>
-                <span>资质: 45</span>
-              </p>
-            </li>
-            <li>
-              <div>
-                <img src="/img/info_2.png" alt="" />
-              </div>
-              <p>
-                <span>力量: 93</span>
-                <span>资质: 45</span>
-              </p>
-            </li>
-            <li>
-              <div>
-                <img src="/img/info_3.png" alt="" />
-              </div>
-              <p>
-                <span>力量: 93</span>
-                <span>资质: 45</span>
-              </p>
-            </li>
-            <li>
-              <div>
-                <img src="/img/info_4.png" alt="" />
-              </div>
-              <p>
-                <span>力量: 93</span>
-                <span>资质: 45</span>
-              </p>
-            </li>
-            <li>
-              <div>
-                <img src="/img/info_5.png" alt="" />
-              </div>
-              <p>
-                <span>力量: 93</span>
-                <span>资质: 45</span>
-              </p>
-            </li>
+            <li>力量: 93</li>
+            <li>智慧: 93</li>
+            <li>灵巧: 93</li>
+            <li>体质: 93</li>
+            <li>速度: 93</li>
           </ul>
         </div>
         <div className={styles.contentRight}>
-          <ul className={styles.contentRightItem1}>
-            <li>普通攻击</li>
+          <ul className={styles.contentRightItem}>
+            <li>
+              <img src="/icons/state.svg" alt="" />
+              <span>普通攻击</span>
+            </li>
             <li
               onClick={() => {
                 setOpen(true);
               }}
             >
-              力劈华山
+              <img src="/icons/state.svg" alt="" />
+              <span>力劈华山</span>
             </li>
-            <li>普通攻击</li>
-            <li>力劈华山</li>
+            <li>
+              <img src="/icons/state.svg" alt="" />
+              <span>普通攻击</span>
+            </li>
+            <li>
+              <img src="/icons/state.svg" alt="" />
+              <span>普通攻击</span>
+            </li>
           </ul>
-          <ul className={styles.contentRightItem2}>
-            <li>威震天下</li>
-            <li>水淹七军</li>
-            <li>普通攻击</li>
-            <li>过关斩将</li>
+          <div className={styles.contentRightDivider}>
+            <img src="/icons/line2.png" alt="" />
+          </div>
+          <ul className={styles.contentRightItem}>
+            <li>
+              <img src="/icons/state.svg" alt="" />
+              <span>普通攻击</span>
+            </li>
+            <li
+              onClick={() => {
+                setOpen(true);
+              }}
+            >
+              <img src="/icons/state.svg" alt="" />
+              <span>力劈华山</span>
+            </li>
+            <li>
+              <img src="/icons/state.svg" alt="" />
+              <span>普通攻击</span>
+            </li>
+            <li>
+              <img src="/icons/state.svg" alt="" />
+              <span>普通攻击</span>
+            </li>
           </ul>
         </div>
         <div className={styles.contentArrow}>
@@ -112,30 +106,14 @@ const Main = () => {
           <img src="/img/arrow_right.png" alt="" />
         </div>
       </div>
-      <div className={styles.baseInfo}>
-        <ul>
-          <li>
-            <div>
-              <img src="/img/base_1.png" alt="" />
-            </div>
-            <span>血量: 999</span>
-          </li>
-          <li>
-            <div>
-              <img src="/img/base_2.png" alt="" />
-            </div>
-            <span>攻击: 999</span>
-          </li>
-          <li>
-            <div>
-              <img src="/img/base_3.png" alt="" />
-            </div>
-            <span>法术: 999</span>
-          </li>
-        </ul>
-      </div>
       <div className={styles.bottom}>
-        <img src="/img/back.png" alt="" />
+        <img src="/icons/Button_tiny_arrowleft.png" alt="" />
+        <img src="/icons/bt1.png" alt="" />
+        <img
+          style={{ visibility: "hidden" }}
+          src="/icons/Button_tiny_arrowleft.png"
+          alt=""
+        />
       </div>
       <Modal className={styles.modalWrap} open={open} onClose={handleClose}>
         <div

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
-import CardList from "@/components/pages/card/list";
+import Decompose from "@/components/pages/config/Decompose";
 import styles from "@/styles/Home.module.css";
 
 const geistSans = Geist({
@@ -24,7 +24,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <CardList />
+        <Decompose />
       </main>
     </>
   );

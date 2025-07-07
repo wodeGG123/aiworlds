@@ -6,6 +6,10 @@
   display: flex;
   justify-content: space-around;
   width: 100%;
+
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  display: flex;
   & > div {
     display: flex;
     flex-direction: column;

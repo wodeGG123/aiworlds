@@ -24,7 +24,7 @@ const Main = ({
   level,
   quality = "white",
   star = 1,
-  url = "/img/card_temp.png",
+  url = "/img/card/item.png",
 }: any) => {
   const width = sizeMap[size].width;
   const height = sizeMap[size].height;
@@ -32,15 +32,20 @@ const Main = ({
   return (
     <div className={styles.wrap}>
       <div className={styles.cardWrap}>
+        <div
+          className={styles.cardTray}
+          style={{
+            backgroundImage: `url("/img/card/${quality}_relic_tray.png")`,
+          }}
+        ></div>
         <img src={url} alt="" className={styles.cardImg} />
         <div
           className={styles.cardBorder}
           style={{
-            backgroundImage: `url("/img/card/${quality}_border_style.png")`,
+            backgroundImage: `url("/img/card/${quality}_relic_border.png")`,
           }}
         ></div>
       </div>
-      <p>{name}</p>
     </div>
   );
 };

@@ -1,0 +1,85 @@
+.wrap {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 60px;
+  overflow: hidden;
+  position: relative;
+  background-image: url("/img/relic_info_bg.jpg");
+  background-size: 100% 100%;
+  .top {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h5 {
+      color: #fcd587;
+      font-weight: normal;
+    }
+    h2 {
+      margin-top: 10px;
+      margin-bottom: 4px;
+      font-size: 40px;
+      color: #fcd587;
+    }
+    img {
+      height: 16px;
+      margin: 0 2px;
+    }
+  }
+  .content {
+    margin-top: 20px;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    & > div {
+      width: 270px;
+      height: 245px;
+      background-image: url("/img/relic_bg.png");
+      background-size: 100% 100%;
+      display: flex;
+      justify-content: center;
+      & > img {
+        height: 100%;
+      }
+    }
+  }
+  .description {
+  }
+  .bottom {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    height: 60px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.4);
+    img {
+      height: 30px;
+    }
+  }
+}
+.modalWrap {
+  // background-color: #fff;
+  // color: #ffffff;
+  background: none;
+}
+.modalContentWrap {
+  // background-color: #fff;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  div {
+    padding: 20px 30px;
+    width: 70%;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}

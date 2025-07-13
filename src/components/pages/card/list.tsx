@@ -2,7 +2,7 @@ import styles from "./index.module.scss";
 import Drawer from "@mui/material/Drawer";
 import Coin from "@/components/Coin";
 import Footer from "@/components/Footer";
-import Card from "@/components/Relic";
+import Card from "@/components/Card";
 import LevelLine from "@/components/LevelLine";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

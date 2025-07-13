@@ -253,22 +253,7 @@ const Main = () => {
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    localforage.getItem("access_token").then((data) => {
-      if (data) {
-        startAI("");
-      } else {
-        router.push("/user/login");
-      }
-    });
-    // axios({
-    //   url: "/api/card/info",
-    //   method: "get",
-    //   data: {
-    //     cardId: "67ffc19de478a528a0c3ae53",
-    //   },
-    // }).then((res) => {
-    //   console.log(res);
-    // });
+    startAI("");
   }, []);
   function handleImageLoad(e) {
     console.log(e);
@@ -278,9 +263,9 @@ const Main = () => {
   return (
     <div
       className={styles.wrap}
-      style={{
-        backgroundImage: `url(${scene})`,
-      }}
+      // style={{
+      //   backgroundImage: `url(${scene})`,
+      // }}
     >
       <div className={styles.npc}>
         <img
@@ -317,7 +302,7 @@ const Main = () => {
 
       <div className={styles.backWrap}>
         <img
-          src="/icons/forward.png"
+          src="/icons/Button_tiny_arrowright.png"
           alt=""
           onClick={() => {
             startAI("");

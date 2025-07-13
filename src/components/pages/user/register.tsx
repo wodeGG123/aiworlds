@@ -31,10 +31,17 @@ const Main = () => {
             placeholder="password"
           />
         </div>
-        <div className={styles.bt}>
-          <img src="/icons/bt_login.png" alt="" />
+        <div className={styles.inputItem2}>
+          <input
+            type="password"
+            className={styles.input}
+            placeholder="Confirm password"
+          />
         </div>
-        <h3>New to the World</h3>
+        <div className={styles.bt}>
+          <img src="/icons/bt_create.png" alt="" />
+        </div>
+        <h3>Already have an account</h3>
       </div>
     </div>
   );

@@ -4,4 +4,72 @@
   position: relative;
   background-image: url("/img/user_bg.jpg");
   background-size: 100% 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & > img {
+    width: 100px;
+  }
+  & > h4 {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #fcd587;
+  }
+  .content {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 10px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    h3 {
+      color: #fcd587;
+      font-weight: normal;
+    }
+    img {
+      margin-top: 6px;
+    }
+    .inputItem1 {
+      margin-top: 10px;
+      width: 315px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding-left: 15px;
+      background-color: #4c4956;
+      .input {
+        background-color: transparent !important;
+        color: #ffffff !important;
+        border: none;
+        box-shadow: none;
+      }
+    }
+    .inputItem2 {
+      margin-top: 10px;
+      width: 315px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding-left: 15px;
+      background-color: #644506;
+      border: 1px solid #b57d0b;
+      .input {
+        background-color: transparent !important;
+        color: #ffffff !important;
+        border: none;
+        box-shadow: none;
+      }
+    }
+  }
+  .bt {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 315px;
+    img {
+      width: 100%;
+    }
+  }
 }

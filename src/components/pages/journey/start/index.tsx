@@ -58,11 +58,7 @@ const Main = () => {
       <div className={styles.bottom}>
         <img src="/icons/Button_tiny_arrowleft.png" alt="" />
         <img src="/icons/bt1.png" alt="" style={{ visibility: "hidden" }} />
-        <img
-          style={{ visibility: "hidden" }}
-          src="/icons/Button_tiny_arrowleft.png"
-          alt=""
-        />
+        <img src="/icons/Button_tiny_arrowright.png" alt="" />
       </div>
     </div>
   );

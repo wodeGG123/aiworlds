@@ -18,6 +18,23 @@ import npcList from "@/lib/npclist";
 import localforage from "localforage";
 import { useRouter } from "next/navigation";
 import ev from "@/lib/ev";
+import yaml from "js-yaml";
+function extractYamlBlocks(text, options = {}) {
+  const { trim = true, allowPlainBlock = false } = options;
+  const pattern = allowPlainBlock
+    ? /```(?:yaml)?\n([\s\S]+?)\n```/g
+    : /```yaml\n([\s\S]+?)\n```/g;
+
+  const matches = [];
+  let match;
+  while ((match = pattern.exec(text)) !== null) {
+    let content = match[1];
+    if (trim) content = content.trim();
+    matches.push(content);
+  }
+
+  return matches;
+}
 function replaceAllEscapes(str) {
   console.log("pre str", str);
 
@@ -227,6 +244,9 @@ const Main = () => {
             content: t,
           });
           console.log("t", t);
+          const ttt = extractYamlBlocks(t);
+          const parsed = yaml.load(ttt); // 验证 YAML 是否合法
+          console.log("parsed", parsed);
           // t = t.replaceAll("\\n", "");
           // t = t.replaceAll("\\", "");
           // t = t.replaceAll(" ", "");

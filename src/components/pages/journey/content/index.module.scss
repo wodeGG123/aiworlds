@@ -5,15 +5,21 @@
   color: #ffffff;
   position: fixed;
   font-size: 12px;
+  width: 100vw;
+  height: 100vh;
   left: 0;
   top: 0;
-  right: 0;
-  bottom: 0;
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   .npc {
     padding-top: 60px;
     width: 100%;
     display: flex;
     justify-content: center;
+
     z-index: 0;
     img {
       width: 40%;
@@ -22,8 +28,12 @@
     }
   }
   .content {
-    // padding: 12px;
+    width: 100%;
+    padding: 12px 20px;
     background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    border-top: 1xp solid rgba(255, 255, 255, 0.8);
+    border-bottom: 1xp solid rgba(255, 255, 255, 0.8);
     font-size: 16px;
     z-index: 1;
     position: relative;

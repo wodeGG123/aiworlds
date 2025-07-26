@@ -3,9 +3,11 @@ import Link from "next/link";
 import Coin from "@/components/Coin";
 import Card from "@/components/Card";
 import Resource from "@/components/Resource";
+import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
 
 const Main = () => {
+  const router = useRouter();
   return (
     <div className={styles.wrap}>
       <div className={styles.resourceWrap} style={{ visibility: "hidden" }}>
@@ -56,9 +58,21 @@ const Main = () => {
         </dl>
       </div>
       <div className={styles.bottom}>
-        <img src="/icons/Button_tiny_arrowleft.png" alt="" />
+        <img
+          src="/icons/Button_tiny_arrowleft.png"
+          alt=""
+          onClick={() => {
+            router.push("/journey/list");
+          }}
+        />
         <img src="/icons/bt1.png" alt="" style={{ visibility: "hidden" }} />
-        <img src="/icons/Button_tiny_arrowright.png" alt="" />
+        <img
+          src="/icons/Button_tiny_arrowright.png"
+          alt=""
+          onClick={() => {
+            router.push("/journey/content");
+          }}
+        />
       </div>
     </div>
   );

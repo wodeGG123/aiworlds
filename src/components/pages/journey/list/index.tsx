@@ -2,17 +2,24 @@ import styles from "./index.module.scss";
 import Link from "next/link";
 import Coin from "@/components/Coin";
 import Card from "@/components/Card";
+import { useRouter } from "next/navigation";
 import Resource from "@/components/Resource";
 import Footer from "@/components/Footer";
 
 const Main = () => {
+  const router = useRouter();
   return (
     <div className={styles.wrap}>
       <div className={styles.resourceWrap}>
         <Resource />
       </div>
       <div className={styles.content}>
-        <div className={styles.contentItem}>
+        <div
+          className={styles.contentItem}
+          onClick={() => {
+            router.push("/journey/start");
+          }}
+        >
           <img
             src="/img/journey_img_1.png"
             className={styles.contentItemBg}

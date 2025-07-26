@@ -24,7 +24,11 @@ const Main = () => {
   };
   return (
     <div className={styles.wrap}>
-      <div>
+      <div
+        onClick={() => {
+          router.push("/");
+        }}
+      >
         <img src="/icons/icon_menu_1.png" alt="" />
         <p>庄园</p>
       </div>
@@ -32,7 +36,11 @@ const Main = () => {
         <img src="/icons/icon_menu_2.png" alt="" />
         <p>融合</p>
       </div>
-      <div>
+      <div
+        onClick={() => {
+          router.push("/journey/list");
+        }}
+      >
         <img src="/icons/icon_menu_3.png" alt="" />
         <p>冒险</p>
       </div>

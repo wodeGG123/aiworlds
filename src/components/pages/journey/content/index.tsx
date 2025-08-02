@@ -51,7 +51,10 @@ let msgs = [
 const Main = () => {
   const [open, setOpen] = React.useState(false);
   const [step, setStep] = useState("");
+  const [scene, setScene] = useState("/img/map.jpg");
+  const [role, setRole] = useState("/img/1.png");
   const [data, setData] = useState({});
+
   const router = useRouter();
 
   const startAI = (item: any) => {
@@ -130,14 +133,21 @@ const Main = () => {
       tag = true;
     }
   }, []);
-
+  useEffect(() => {
+    if (data.event_scene) {
+      setScene(`/img/猎魔人/猎魔人场景/${data.event_scene}/1.jpg`);
+    }
+  }, [data]);
   return (
     <div
       className={styles.wrap}
-      // style={{
-      //   backgroundImage: `url(${scene})`,
-      // }}
+      style={{
+        backgroundImage: `url(${scene})`,
+      }}
     >
+      <div className={styles.role}>
+        <img src={role} alt="" />
+      </div>
       <div className={styles.content}>
         {step === "Narration" && (
           <Narration
@@ -155,6 +165,9 @@ const Main = () => {
         )}
         {step === "Dialogue" && (
           <Dialogue
+            onSpeaker={(role) => {
+              setRole(`/img/猎魔人/猎魔人角色/${role}/2.jpg`);
+            }}
             onClick={() => {
               if (data.event_options) {
                 setStep("Options");

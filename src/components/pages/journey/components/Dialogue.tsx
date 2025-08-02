@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import Typewriter from "./TypeWriter";
 
-const Main = ({ data, onClick = () => {} }) => {
+const Main = ({ data, onClick = () => {}, onSpeaker = (role: any) => {} }) => {
   const [show, setShow] = useState(false);
   const [step, setStep] = useState(0);
   useEffect(() => {
     setShow(true);
   }, []);
+  useEffect(() => {
+    onSpeaker(data[step].speaker);
+  }, [step]);
   return (
     <div
       onClick={() => {

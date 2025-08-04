@@ -21,7 +21,7 @@ const ItemCompontent = () => {
   );
 };
 
-const Main = ({ onClick = () => {}, elm = [] }) => {
+const Main = ({ onClick = (o: any) => {}, elm = [] }) => {
   const [status, setStatus] = useState(0);
   const [log, setLog] = useState("");
   const [roundNumber, setRoundNumber] = useState(0);
@@ -294,24 +294,39 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
       // const teamB = [characterB1, characterB2];
 
       const go = async () => {
-        const A: any = await localforage.getItem("my-cards");
+        // const A: any = await localforage.getItem("my-cards");
+        // 艾琳、雷克斯、索菲娅、凯文
+        const A: any = [
+          {
+            name: "艾琳",
+          },
+          {
+            name: "雷克斯",
+          },
+          {
+            name: "索菲娅",
+          },
+          {
+            name: "凯文",
+          },
+        ];
 
         const teamA = elm.map((item: any, index: number) => {
           return new Character(`${A[index].name}【我方】`, {
             health: 100,
-            attack: Math.max(Number(item.attack), Number(item.defense)) + 30,
-            defense: Math.min(Number(item.attack), Number(item.defense)) + 10,
-            speed: Number(item.speed),
-            src: `/img/赤壁之战/人物/${A[index].name}/0.png`,
+            attack: 50,
+            defense: 10,
+            speed: 60,
+            src: `/img/猎魔人/猎魔人角色/${A[index].name}/1.jpg`,
           });
         });
         const teamB = elm.map((item: any) => {
           return new Character(`${item.name}【敌方】`, {
             health: 100,
-            attack: Math.max(Number(item.attack), Number(item.defense)) + 10,
-            defense: Math.min(Number(item.attack), Number(item.defense)) - 10,
-            speed: Number(item.speed),
-            src: item.src,
+            attack: 15,
+            defense: 5,
+            speed: 50,
+            src: `/img/猎魔人/猎魔人角色/${item.name}/1.jpg`,
           });
         });
         const battleSystem = new BattleSystem(teamA, teamB);
@@ -341,13 +356,7 @@ const Main = ({ onClick = () => {}, elm = [] }) => {
             战斗日志: <span id="battle-log">{log}</span>
           </p>
           <div>
-            <button
-              onClick={() => {
-                set;
-              }}
-            >
-              战斗加速
-            </button>
+            <button onClick={() => {}}>战斗加速</button>
           </div>
         </div>
       </div>

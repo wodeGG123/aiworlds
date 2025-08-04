@@ -154,10 +154,8 @@ const Main = () => {
             onClick={() => {
               if (data.event_dialogue) {
                 setStep("Dialogue");
-              }
-              if (data.battle_start) {
-                setStep("");
-                startAI("战斗胜利");
+              } else if (data.battle_start) {
+                setStep("Fighter");
               }
             }}
             data={data.event_narration}
@@ -171,10 +169,8 @@ const Main = () => {
             onClick={() => {
               if (data.event_options) {
                 setStep("Options");
-              }
-              if (data.battle_start) {
-                setStep("");
-                startAI("战斗胜利");
+              } else if (data.battle_start) {
+                setStep("Fighter");
               }
             }}
             data={data.event_dialogue}
@@ -190,7 +186,15 @@ const Main = () => {
           />
         )}
       </div>
-
+      {data.battle_start && step === "Fighter" && (
+        <Fighter
+          onClick={(o) => {
+            setStep("");
+            startAI(o);
+          }}
+          elm={data.battle_start.enemies}
+        />
+      )}
       <Modal
         open={open}
         aria-labelledby="modal-modal-title"

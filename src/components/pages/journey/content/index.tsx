@@ -148,11 +148,24 @@ const Main = () => {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     if (!tag) {
       startAI("");
       tag = true;
       getMyCards();
     }
+=======
+    // if (!tag) {
+    //   startAI("");
+    //   tag = true;
+    // }
+    request({
+      url: "/api/card/active",
+      method: "get",
+    }).then((res) => {
+      localforage.setItem("active-cards", res.data.cards);
+    });
+>>>>>>> 86cf53507dbff77acf19e4e30371a463b38b2856
   }, []);
   console.log("myCards", myCards);
 

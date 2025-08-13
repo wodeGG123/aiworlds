@@ -7,10 +7,26 @@ import { useEffect } from "react";
 import localforage from "localforage";
 import { useRouter } from "next/navigation";
 import Footer from "@/components/Footer";
+import request from "@/utils/request";
 
 const Main = () => {
   const router = useRouter();
   useEffect(() => {
+    const params = {
+      page: 1,
+      page_size: 100,
+      order_by: "createdAt",
+      ascending: false,
+      query_all: true,
+    };
+    request({
+      method: "get",
+      url: "/api/card",
+      params,
+    }).then((res) => {
+      localforage.setItem("raw-cards", res.data);
+    });
+
     // localforage.getItem("access_token").then((data) => {
     //   if (data) {
     //     router.push("/journey/content");

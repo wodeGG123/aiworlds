@@ -16,11 +16,12 @@ import Narration from "../components/Narration";
 import Dialogue from "../components/Dialogue";
 import Options from "../components/Options";
 import Fighter from "../components/Fighter";
-import _ from "lodash";
+import _, { forEach } from "lodash";
 import npcList from "@/lib/npclist";
 import localforage from "localforage";
 import { useRouter } from "next/navigation";
 import ev from "@/lib/ev";
+import request from "@/utils/request";
 import yaml from "js-yaml";
 
 let tag = false;
@@ -54,7 +55,7 @@ const Main = () => {
   const [scene, setScene] = useState("/img/map.jpg");
   const [role, setRole] = useState("/img/1.png");
   const [data, setData] = useState({});
-
+  const [myCards, setMyCards] = useState([]);
   const router = useRouter();
 
   const startAI = (item: any) => {
@@ -127,12 +128,34 @@ const Main = () => {
   };
   const handleClose = () => setOpen(false);
 
+  const getMyCards = async () => {
+    const res = await request({
+      method: "get",
+      url: "/api/lineup",
+    });
+    const localCards: any = await localforage.getItem("my-cards");
+    if (localCards) {
+      localCards.forEach((localCard: any) => {
+        res.data.cards.forEach((card: any) => {
+          if (localCard.id === card.card_id) {
+            localCard.attributes = card.attributes;
+          }
+        });
+      });
+
+      setMyCards(localCards);
+    }
+  };
+
   useEffect(() => {
     if (!tag) {
       startAI("");
       tag = true;
+      getMyCards();
     }
   }, []);
+  console.log("myCards", myCards);
+
   useEffect(() => {
     if (data.event_scene) {
       setScene(`/img/猎魔人/猎魔人场景/${data.event_scene}/1.jpg`);
@@ -192,6 +215,7 @@ const Main = () => {
             setStep("");
             startAI(o);
           }}
+          mine={myCards}
           elm={data.battle_start.enemies}
         />
       )}

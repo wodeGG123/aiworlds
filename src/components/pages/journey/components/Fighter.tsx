@@ -21,7 +21,7 @@ const ItemCompontent = () => {
   );
 };
 
-const Main = ({ onClick = (o: any) => {}, elm = [] }) => {
+const Main = ({ onClick = (o: any) => {}, mine = [], elm = [] }) => {
   const [status, setStatus] = useState(0);
   const [log, setLog] = useState("");
   const [roundNumber, setRoundNumber] = useState(0);
@@ -296,34 +296,22 @@ const Main = ({ onClick = (o: any) => {}, elm = [] }) => {
       const go = async () => {
         // const A: any = await localforage.getItem("my-cards");
         // 艾琳、雷克斯、索菲娅、凯文
-        const A: any = [
-          {
-            name: "艾琳",
-          },
-          {
-            name: "雷克斯",
-          },
-          {
-            name: "索菲娅",
-          },
-          {
-            name: "凯文",
-          },
-        ];
+        const A: any = mine;
+        console.log(A);
 
-        const teamA = elm.map((item: any, index: number) => {
-          return new Character(`${A[index].name}【我方】`, {
-            health: 100,
-            attack: 50,
-            defense: 10,
+        const teamA = A.map((item: any, index: number) => {
+          return new Character(`${item.name}【我方】`, {
+            health: item.attributes.hp,
+            attack: item.attributes.physical_attack,
+            defense: item.attributes.armor / 10,
             speed: 60,
-            src: `/img/猎魔人/猎魔人角色/${A[index].name}/1.jpg`,
+            src: `/img/猎魔人/猎魔人角色/${item.name}/1.jpg`,
           });
         });
         const teamB = elm.map((item: any) => {
           return new Character(`${item.name}【敌方】`, {
-            health: 100,
-            attack: 15,
+            health: 30,
+            attack: 10,
             defense: 5,
             speed: 50,
             src: `/img/猎魔人/猎魔人角色/${item.name}/1.jpg`,

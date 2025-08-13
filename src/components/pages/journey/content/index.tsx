@@ -21,6 +21,7 @@ import npcList from "@/lib/npclist";
 import localforage from "localforage";
 import { useRouter } from "next/navigation";
 import ev from "@/lib/ev";
+import request from "@/utils/request";
 import yaml from "js-yaml";
 
 let tag = false;
@@ -128,10 +129,16 @@ const Main = () => {
   const handleClose = () => setOpen(false);
 
   useEffect(() => {
-    if (!tag) {
-      startAI("");
-      tag = true;
-    }
+    // if (!tag) {
+    //   startAI("");
+    //   tag = true;
+    // }
+    request({
+      url: "/api/card/active",
+      method: "get",
+    }).then((res) => {
+      localforage.setItem("active-cards", res.data.cards);
+    });
   }, []);
   useEffect(() => {
     if (data.event_scene) {

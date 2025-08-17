@@ -26,6 +26,13 @@ const Main = () => {
     }).then((res) => {
       localforage.setItem("raw-cards", res.data);
     });
+    request({
+      method: "get",
+      url: "/api/user/info",
+      params,
+    }).then((res) => {
+      console.log(res);
+    });
 
     // localforage.getItem("access_token").then((data) => {
     //   if (data) {

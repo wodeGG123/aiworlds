@@ -90,6 +90,7 @@ const Main = () => {
                     const element = res[index];
                     myCards.push(element.data);
                   }
+                  debugger;
                   localforage.setItem("my-cards", myCards);
                 });
                 router.push("/home");

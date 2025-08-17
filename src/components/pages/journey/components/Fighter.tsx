@@ -6,6 +6,7 @@ import LevelLine from "@/components/LevelLine";
 import CardFight from "@/components/CardFight";
 import _ from "lodash";
 import localforage from "localforage";
+import request from "@/utils/request";
 let tag = true;
 let res = "战斗胜利";
 const logs = [];
@@ -149,6 +150,10 @@ const Main = ({ onClick = (o: any) => {}, mine = [], elm = [] }) => {
           } else if (!teamBAlive) {
             res = "战斗胜利";
             setStatus(3);
+            request({
+              method: "post",
+              url: "/api/fight/end",
+            });
             return "Team A 胜利";
           }
           return null;
@@ -301,9 +306,9 @@ const Main = ({ onClick = (o: any) => {}, mine = [], elm = [] }) => {
 
         const teamA = A.map((item: any, index: number) => {
           return new Character(`${item.name}【我方】`, {
-            health: item.attributes.hp,
-            attack: item.attributes.physical_attack,
-            defense: item.attributes.armor / 10,
+            health: 100,
+            attack: 30,
+            defense: 10,
             speed: 60,
             src: `/img/猎魔人/猎魔人角色/${item.name}/1.jpg`,
           });
@@ -321,8 +326,39 @@ const Main = ({ onClick = (o: any) => {}, mine = [], elm = [] }) => {
         battleSystem.initUI();
         battleSystem.autoBattle();
         console.log("teamB", teamB);
+        localforage.getItem("raw-cards").then((rawCards) => {
+          const rawCardsObj = rawCards.reduce((acc, current) => {
+            // 将当前对象的id作为键，对象本身作为值存入累加器
+            acc[current.name] = current;
+            return acc;
+          }, {});
+          const es = {};
+          teamB.forEach((element) => {
+            es[element.name] = rawCardsObj[element.name];
+          });
+          console.log("es", es);
+
+          const params = Object.values(es).map((item) => {
+            return {
+              item_id: item.id,
+              drop_type: "card",
+              quality_coef: 1,
+            };
+          });
+          request({
+            method: "post",
+            url: "/api/fight/add",
+            data: {
+              items: params,
+            },
+          });
+        });
       };
       go();
+      request({
+        method: "post",
+        url: "/api/fight/start",
+      });
     }
   }, []);
   return (

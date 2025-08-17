@@ -8,14 +8,8 @@ export default async function handler(
     const rawCookies = req.headers.cookie || "";
 
     const response = await axios({
-      url: "https://iablikcamuku.sealoshzh.site/api/v1/user-cards",
+      url: "https://iablikcamuku.sealoshzh.site/api/v1/user-system",
       method: "get",
-      data: {
-        page: 1,
-        page_size: 50,
-        order_by: "created_at",
-        ascending: false,
-      },
       headers: {
         Cookie: rawCookies,
         "Content-Type": "application/json",

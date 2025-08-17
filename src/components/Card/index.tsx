@@ -22,13 +22,20 @@ const Main = ({
   size = "big",
   name,
   level,
-  quality = "white",
+  quality = 1,
   star = 1,
   url = "/img/card_temp.png",
 }: any) => {
   const width = sizeMap[size].width;
   const height = sizeMap[size].height;
   const fontSize = sizeMap[size].fontSize;
+  const qualityMap = {
+    1: "white",
+    2: "blue",
+    3: "green",
+    4: "orange",
+    5: "purple",
+  };
   return (
     <div className={styles.wrap}>
       <div className={styles.cardWrap}>
@@ -36,7 +43,7 @@ const Main = ({
         <div
           className={styles.cardBorder}
           style={{
-            backgroundImage: `url("/img/card/${quality}_border_style.png")`,
+            backgroundImage: `url("/img/card/purple_border_style.png")`,
           }}
         ></div>
       </div>

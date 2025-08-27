@@ -129,22 +129,27 @@ const Main = () => {
   const handleClose = () => setOpen(false);
 
   const getMyCards = async () => {
-    const res = await request({
+    request({
+      url: "/api/card/active",
       method: "get",
-      url: "/api/lineup",
-    });
-    const localCards: any = await localforage.getItem("my-cards");
-    if (localCards) {
-      localCards.forEach((localCard: any) => {
-        res.data.cards.forEach((card: any) => {
-          if (localCard.id === card.card_id) {
-            localCard.attributes = card.attributes;
-          }
+    }).then((res) => {
+      localforage.getItem("raw-cards").then((rawCards) => {
+        const rs = [];
+        const rawCardsObj = rawCards.reduce((acc, current) => {
+          // 将当前对象的id作为键，对象本身作为值存入累加器
+          acc[current.id] = current;
+          return acc;
+        }, {});
+        res.data.cards.forEach((element) => {
+          rs.push({
+            ...rawCardsObj[element.card_id],
+            ...element,
+          });
         });
+        localforage.setItem("active-cards", rs);
+        setMyCards(rs);
       });
-
-      setMyCards(localCards);
-    }
+    });
   };
 
   useEffect(() => {
@@ -157,12 +162,6 @@ const Main = () => {
     //   startAI("");
     //   tag = true;
     // }
-    request({
-      url: "/api/card/active",
-      method: "get",
-    }).then((res) => {
-      localforage.setItem("active-cards", res.data.cards);
-    });
   }, []);
   console.log("myCards", myCards);
 

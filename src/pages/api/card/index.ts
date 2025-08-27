@@ -4,8 +4,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const rawCookies = req.headers.cookie || "";
-  console.log(req);
+  const rawCookies = req.headers["access-token"] || "";
   const url = req.url?.split("?")[1];
 
   try {
@@ -13,7 +12,7 @@ export default async function handler(
       url: `https://iablikcamuku.sealoshzh.site/api/v1/cards?${url}`,
       method: "get",
       headers: {
-        Cookie: rawCookies,
+        Cookie: `access_token=${rawCookies}`,
         "Content-Type": "application/json",
       },
     });

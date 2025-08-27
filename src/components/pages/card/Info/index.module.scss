@@ -81,6 +81,19 @@
           height: 32px;
         }
       }
+      .contentLeftLvPrs {
+        display: flex;
+        align-items: center;
+        img {
+          width: 30;
+          height: 30;
+        }
+        span {
+          margin-left: 6px;
+          font-size: 12px;
+          color: #ffffff;
+        }
+      }
       .contentLeftInfo {
         background-color: rgba(0, 0, 0, 0.4);
         li {

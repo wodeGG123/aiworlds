@@ -6,14 +6,33 @@ import Card from "@/components/Card";
 import LevelLine from "@/components/LevelLine";
 import Tooltip from "@mui/material/Tooltip";
 import { useRouter } from "next/navigation";
+import { withRouter } from "next/router";
 import { useState } from "react";
+import request from "@/utils/request";
 import Modal from "@mui/material/Modal";
 
-const Main = () => {
-  const router = useRouter();
+const Main = ({ router }) => {
+  // const router = useRouter();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  console.log(router);
+  const handleDecompose = () => {
+    request({
+      method: "post",
+      url: "/api/card/decompose",
+      data: [router.query.id],
+    });
+  };
+  const handleUpgreade = () => {
+    request({
+      method: "post",
+      url: "/api/card/upgrade",
+      data: {
+        id: router.query.id,
+      },
+    });
+  };
   return (
     <div className={styles.wrap}>
       <img src="/img/Hero_01.jpg" alt="" />
@@ -40,10 +59,19 @@ const Main = () => {
       <div className={styles.content}>
         <div className={styles.contentLeft}>
           <div className={styles.contentLeftLv}>
-            <img src="/icons/star.svg" alt="" />
             <span>99</span>
+            <img
+              src="/icons/bt1.png"
+              alt=""
+              onClick={() => {
+                handleUpgreade();
+              }}
+            />
           </div>
-
+          <div className={styles.contentLeftLvPrs}>
+            <img src="/icons/icon_currency.png" alt="" />
+            <span>30/19</span>
+          </div>
           <ul className={styles.contentLeftInfo}>
             <li>力量: 93</li>
             <li>智慧: 93</li>
@@ -108,7 +136,13 @@ const Main = () => {
       </div>
       <div className={styles.bottom}>
         <img src="/icons/Button_tiny_arrowleft.png" alt="" />
-        <img src="/icons/bt1.png" alt="" />
+        <img
+          src="/icons/bt1.png"
+          alt=""
+          onClick={() => {
+            handleDecompose();
+          }}
+        />
         <img
           style={{ visibility: "hidden" }}
           src="/icons/Button_tiny_arrowleft.png"
@@ -131,4 +165,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default withRouter(Main);

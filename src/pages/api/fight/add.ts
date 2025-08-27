@@ -16,7 +16,7 @@ export default async function handler(
         Cookie: rawCookies,
         "Content-Type": "application/json",
       },
-      params: req.body,
+      data: req.body,
     });
     // 透传响应头和状态码
     res.status(response.status);

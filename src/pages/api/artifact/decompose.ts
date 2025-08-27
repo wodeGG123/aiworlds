@@ -4,26 +4,26 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const rawCookies = req.headers.cookie || "";
+  console.log(req);
+  const url = req.url?.split("?")[1];
+
   try {
     const response = await axios({
-      url: "https://iablikcamuku.sealoshzh.site/api/v1/auth/login",
+      url: `https://iablikcamuku.sealoshzh.site/api/v1/card-cultivation/decompose`,
       method: "post",
-      params: req.body,
       headers: {
-        Cookie: "xxxxx",
+        Cookie: rawCookies,
+        "Content-Type": "application/json",
       },
+      data: req.body,
     });
     // 透传响应头和状态码
     res.status(response.status);
     Object.entries(response.headers).forEach(([key, value]) => {
       res.setHeader(key, value);
     });
-    let access_token = response.headers["set-cookie"][0];
-    access_token = access_token.split(";")[0];
-    access_token = access_token.split("=")[1];
-    console.log(access_token);
-
-    res.json({ ...response.data, access_token }); // 关键：返回数据给客户端
+    res.json(response.data); // 关键：返回数据给客户端
   } catch (err) {
     console.log(err);
 

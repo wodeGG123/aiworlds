@@ -10,9 +10,9 @@ export default async function handler(
     const response = await axios({
       url: "https://iablikcamuku.sealoshzh.site/api/v1/user-cards",
       method: "get",
-      data: {
+      params: {
         page: 1,
-        page_size: 50,
+        page_size: 100,
         order_by: "created_at",
         ascending: false,
       },

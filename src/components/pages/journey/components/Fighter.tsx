@@ -333,17 +333,21 @@ const Main = ({ onClick = (o: any) => {}, mine = [], elm = [] }) => {
             return acc;
           }, {});
           const es = {};
-          teamB.forEach((element) => {
+          elm.forEach((element) => {
             es[element.name] = rawCardsObj[element.name];
           });
           console.log("es", es);
 
-          const params = Object.values(es).map((item) => {
-            return {
-              item_id: item.id,
-              drop_type: "card",
-              quality_coef: 1,
-            };
+          const params = [];
+
+          Object.values(es).map((item) => {
+            if (item?.id) {
+              params.push({
+                item_id: item.id,
+                drop_type: "card",
+                quality_coef: 1,
+              });
+            }
           });
           request({
             method: "post",
@@ -352,6 +356,30 @@ const Main = ({ onClick = (o: any) => {}, mine = [], elm = [] }) => {
               items: params,
             },
           });
+        });
+        localforage.getItem("raw-artifacts").then((rawArtifacts) => {
+          const artifactIndex = Math.floor(Math.random() * 99);
+          const rawArtifact = rawArtifacts[artifactIndex];
+          if (rawArtifact) {
+            request({
+              method: "post",
+              url: "/api/fight/add",
+              data: {
+                items: [
+                  {
+                    item_id: rawArtifact.id,
+                    drop_type: "artifact",
+                    quality_coef: 1,
+                  },
+                  {
+                    item_id: String(artifactIndex),
+                    drop_type: "gold",
+                    quality_coef: 1,
+                  },
+                ],
+              },
+            });
+          }
         });
       };
       go();

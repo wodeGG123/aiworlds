@@ -14,8 +14,8 @@ import Modal from "@mui/material/Modal";
 const Main = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] = useState("string123");
+  const [password, setPassword] = useState("string123");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   return (

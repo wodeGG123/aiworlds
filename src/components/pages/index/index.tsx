@@ -19,12 +19,28 @@ const Main = () => {
       ascending: false,
       query_all: true,
     };
+    localforage.getItem("access_token").then((data) => {
+      if (data) {
+        request({
+          method: "get",
+          url: "/api/card",
+          headers: {
+            "Access-Token": `${data}`,
+          },
+          params,
+        }).then((res) => {
+          localforage.setItem("raw-cards", res.data);
+        });
+      } else {
+      }
+    });
+
     request({
       method: "get",
-      url: "/api/card",
+      url: "/api/artifact",
       params,
     }).then((res) => {
-      localforage.setItem("raw-cards", res.data);
+      localforage.setItem("raw-artifacts", res.data.artifacts);
     });
     request({
       method: "get",
